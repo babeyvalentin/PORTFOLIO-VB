@@ -1,1 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOTRE NOM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--w:#ffffff;--off:#f6f6f4;--bk:#111111;--gr:#888;--lg:#d0d0cc;--br:#e4e4e0}
+html{font-size:15px}
+body{background:var(--w);color:var(--bk);font-family:'DM Mono',monospace;cursor:none;-webkit-font-smoothing:antialiased}
 
+/* CURSOR */
+#cur{position:fixed;width:8px;height:8px;background:var(--bk);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s;mix-blend-mode:difference}
+#cur.big{width:40px;height:40px}
+
+/* PAGES */
+.page{display:none}.page.active{display:block}
+
+/* ── HEADER ── */
+header{position:fixed;top:0;left:0;right:0;z-index:400;background:var(--w);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--br)}
+.nav-logo{font-family:'EB Garamond',serif;font-size:16px;font-style:italic;cursor:none}
+.nav-r{display:flex;gap:40px;align-items:center}
+.nl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gr);cursor:none;transition:color .2s}
+.nl:hover,.nl.on{color:var(--bk)}
+
+/* ── HOME ── */
+#home{padding-top:52px;height:100vh;overflow:hidden;position:relative}
+
+/* Scrollable scatter layer */
+.hero-scroll{position:absolute;inset:0;overflow-y:scroll;z-index:1;scrollbar-width:none}
+.hero-scroll::-webkit-scrollbar{display:none}
+.scatter-tall{position:relative;height:270vh;pointer-events:none}
+.scatter{position:absolute;inset:0}
+.sc{position:absolute;overflow:hidden;opacity:0;animation:scIn 1.1s ease forwards}
+.sc img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(6%) brightness(.9)}
+@keyframes scIn{from{opacity:0}to{opacity:1}}
+
+/* Radial mask — above scroll, below fixed content */
+.hmask{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 42% 40% at 50% 50%,rgba(255,255,255,.99) 0%,rgba(255,255,255,.95) 28%,rgba(255,255,255,.6) 52%,rgba(255,255,255,.15) 72%,transparent 90%)}
+
+/* Fixed center — name + role */
+.hcenter{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);z-index:3;text-align:center;pointer-events:none}
+.hname{font-family:'EB Garamond',serif;font-size:clamp(48px,8.5vw,130px);font-weight:400;line-height:1;letter-spacing:-.03em;color:var(--bk);white-space:nowrap;opacity:0;animation:up 1s cubic-bezier(.16,1,.3,1) .1s forwards}
+.hname em{font-style:italic}
+.hrole{margin-top:16px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gr);opacity:0;animation:up .8s ease .5s forwards}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* Fixed bottom categories bar */
+.hcats{position:absolute;bottom:0;left:0;right:0;z-index:3;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--br);background:var(--w);opacity:0;animation:up .8s ease .75s forwards}
+.hcat{padding:28px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;cursor:none;border-right:1px solid var(--br);transition:background .3s;position:relative;overflow:hidden}
+.hcat:last-child{border-right:none}
+.hcat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--bk);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.76,0,.24,1)}
+.hcat:hover{background:var(--off)}.hcat:hover::after{transform:scaleX(1)}
+.hcnum{font-size:10px;letter-spacing:.15em;color:var(--lg);display:block;margin-bottom:6px}
+.hcname{font-family:'EB Garamond',serif;font-size:clamp(22px,2.8vw,38px);font-weight:400;letter-spacing:-.01em;line-height:1}
+.hcname em{font-style:italic}
+.hcdesc{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gr);max-width:150px;line-height:1.7;text-align:right}
+.harr{width:36px;height:1px;background:var(--bk);flex-shrink:0;align-self:flex-end;margin-bottom:4px;position:relative;transition:width .35s ease}
+.harr::after{content:'';position:absolute;right:0;top:-4px;width:8px;height:8px;border-right:1px solid var(--bk);border-top:1px solid var(--bk);transform:rotate(45deg)}
+.hcat:hover .harr{width:56px}
+
+/* ── TICKER ── */
+.ticker-wrap{border-top:1px solid var(--br);overflow:hidden;padding:14px 0;white-space:nowrap;margin-top:auto}
+.ticker{display:inline-block;animation:tick 22s linear infinite;font-family:'EB Garamond',serif;font-style:italic;font-size:13px;letter-spacing:.06em;color:var(--lg)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--br);padding:18px 32px;display:flex;justify-content:space-between;align-items:center}
+footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lg)}
+
+/* ── CAT PAGE ── */
+.cat-page{padding-top:52px}
+.topbar{position:sticky;top:52px;z-index:300;background:var(--w);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;gap:24px}
+.tbname{font-family:'EB Garamond',serif;font-size:18px;font-weight:400;white-space:nowrap}
+.tbname em{font-style:italic}
+.filters{display:flex;align-items:center;flex-wrap:wrap}
+.fbtn{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gr);padding:8px 16px;background:none;border:none;cursor:none;transition:color .2s;position:relative}
+.fbtn::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:1px;background:var(--bk);transform:scaleX(0);transition:transform .3s ease}
+.fbtn:hover{color:var(--bk)}.fbtn.on{color:var(--bk)}.fbtn.on::after,.fbtn:hover::after{transform:scaleX(1)}
+.back-btn{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gr);background:none;border:none;cursor:none;display:flex;align-items:center;gap:10px;transition:color .2s;white-space:nowrap;flex-shrink:0}
+.back-btn:hover{color:var(--bk)}
+.bline{width:20px;height:1px;background:currentColor;position:relative;flex-shrink:0;transition:width .3s ease}
+.bline::before{content:'';position:absolute;left:0;top:-3px;width:6px;height:6px;border-left:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg)}
+.back-btn:hover .bline{width:32px}
+
+/* ── EDITORIAL GRID ── */
+.ed-grid{padding:60px 48px 120px}
+.ed-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+/* Odd rows: left image higher, right lower */
+.ed-row:nth-child(odd) .ed-item:first-child{margin-top:0}
+.ed-row:nth-child(odd) .ed-item:last-child{margin-top:80px}
+/* Even rows: inverse */
+.ed-row:nth-child(even) .ed-item:first-child{margin-top:80px}
+.ed-row:nth-child(even) .ed-item:last-child{margin-top:0}
+
+.ed-item{position:relative;overflow:hidden;cursor:none;background:#f0f0ee}
+.ed-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.25,.46,.45,.94)}
+.ed-item:hover img{transform:scale(1.04)}
+
+/* Hover overlay */
+.ed-overlay{position:absolute;inset:0;background:rgba(10,10,10,0);transition:background .5s ease;display:flex;flex-direction:column;justify-content:flex-end;padding:36px 32px}
+.ed-item:hover .ed-overlay{background:rgba(10,10,10,.52)}
+.ed-title{font-family:'EB Garamond',serif;font-size:clamp(22px,2.5vw,38px);font-weight:400;font-style:italic;color:#fff;letter-spacing:-.01em;line-height:1;opacity:0;transform:translateY(10px);transition:opacity .4s ease .05s,transform .4s ease .05s}
+.ed-item:hover .ed-title{opacity:1;transform:translateY(0)}
+.ed-cat{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:8px;opacity:0;transform:translateY(6px);transition:opacity .35s ease .1s,transform .35s ease .1s}
+.ed-item:hover .ed-cat{opacity:1;transform:translateY(0)}
+
+/* Image heights — alternating tall/medium per row */
+.ed-row:nth-child(odd) .ed-item:first-child{height:68vh}
+.ed-row:nth-child(odd) .ed-item:last-child{height:54vh}
+.ed-row:nth-child(even) .ed-item:first-child{height:54vh}
+.ed-row:nth-child(even) .ed-item:last-child{height:68vh}
+
+/* back nav — top left, no topbar */
+.ed-nav{padding:80px 48px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.ed-page-title{font-family:'EB Garamond',serif;font-size:clamp(42px,6vw,90px);font-weight:400;letter-spacing:-.03em;line-height:.9;text-align:center;width:100%;pointer-events:none}
+.ed-page-title em{font-style:italic}
+.ed-section-title{font-family:'EB Garamond',serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gr)}
+
+.masonry{padding:2px;columns:3;column-gap:2px}
+.pcard{break-inside:avoid;margin-bottom:2px;position:relative;overflow:hidden;cursor:none;display:block;background:#f0f0ee}
+.pcard img{width:100%;display:block;transition:transform .7s cubic-bezier(.25,.46,.45,.94)}
+.pcard:hover img{transform:scale(1.04)}
+.pcard-info{position:absolute;bottom:0;left:0;right:0;padding:48px 20px 18px;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 100%);opacity:0;transform:translateY(5px);transition:opacity .35s,transform .35s}
+.pcard:hover .pcard-info{opacity:1;transform:translateY(0)}
+.pcard-title{font-family:'EB Garamond',serif;font-size:18px;font-weight:400;color:#fff;letter-spacing:.02em;line-height:1.1}
+.pcard-cat{margin-top:4px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.pcard.hidden{display:none}
+
+/* ── PROJECT DETAIL ── */
+#project-detail{padding-top:52px}
+.dtopbar{height:52px;border-bottom:1px solid var(--br);display:flex;align-items:center;padding:0 32px;gap:24px}
+.dtopbar-proj{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gr)}
+.dlayout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 104px)}
+.dside{border-right:1px solid var(--br);padding:40px 32px;position:sticky;top:104px;align-self:start;height:calc(100vh - 104px);overflow-y:auto}
+.dside-title{font-family:'EB Garamond',serif;font-size:30px;font-weight:400;letter-spacing:-.01em;line-height:1.05;margin-bottom:6px}
+.dside-title em{font-style:italic}
+.dside-cat{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gr);margin-bottom:28px;display:flex;align-items:center;gap:6px}
+.cat-dot{width:5px;height:5px;border-radius:50%;background:var(--gr)}
+.dmeta-item{padding:11px 0;border-bottom:1px solid var(--br)}
+.dmeta-item:first-child{border-top:1px solid var(--br)}
+.dmeta-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--lg);margin-bottom:3px}
+.dmeta-val{font-size:12px;color:var(--bk);letter-spacing:.02em;line-height:1.5}
+.dbio{margin-top:28px;font-size:12px;line-height:1.8;color:var(--gr)}
+/* ── HORIZONTAL GALLERY ── */
+.dgallery{position:relative;height:calc(100vh - 104px);overflow:hidden}
+.hslider{display:flex;height:100%;transition:transform .7s cubic-bezier(.77,0,.18,1);will-change:transform}
+.hslide{flex:0 0 100%;height:100%;position:relative;overflow:hidden}
+.hslide img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.hslide:hover img{transform:scale(1.02)}
+
+/* Nav arrows */
+.galnav{position:absolute;bottom:32px;right:40px;display:flex;align-items:center;gap:16px;z-index:10}
+.galnav-btn{width:44px;height:44px;border:1px solid var(--br);background:var(--w);cursor:none;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;flex-shrink:0}
+.galnav-btn:hover{background:var(--bk)}
+.galnav-btn:hover .garrow{border-color:#fff}
+.galnav-btn:hover .garrow::after{border-color:#fff}
+.garrow{width:12px;height:1px;background:currentColor;position:relative}
+.garrow::after{content:'';position:absolute;top:-4px;width:8px;height:8px;border-top:1px solid currentColor;transform:rotate(45deg)}
+.garrow.left::after{left:0;border-right:1px solid currentColor;border-top:none;border-left:1px solid currentColor;transform:rotate(-45deg) translateY(-3px)}
+.garrow.right::after{right:0;border-right:1px solid currentColor}
+
+/* Counter */
+.galcount{position:absolute;bottom:40px;left:40px;z-index:10;font-size:10px;letter-spacing:.18em;color:var(--gr);font-family:'DM Mono',monospace}
+.galcount-cur{color:var(--bk)}
+
+/* Caption on image */
+.hslide-caption{position:absolute;top:32px;right:40px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);font-family:'DM Mono',monospace}
+
+/* Progress bar */
+.galprogress{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--br);z-index:10}
+.galprogress-fill{height:100%;background:var(--bk);transition:width .7s cubic-bezier(.77,0,.18,1)}
+
+/* Next project */
+.dnext{border-top:1px solid var(--br);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;cursor:none;transition:background .3s}
+.dnext:hover{background:var(--off)}
+.dnext-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gr)}
+.dnext-title{font-family:'EB Garamond',serif;font-size:36px;font-style:italic;color:var(--bk);transition:letter-spacing .4s ease}
+.dnext:hover .dnext-title{letter-spacing:.02em}
+.dnarr{width:48px;height:1px;background:var(--bk);flex-shrink:0;position:relative;transition:width .35s ease}
+.dnarr::after{content:'';position:absolute;right:0;top:-4px;width:8px;height:8px;border-right:1px solid var(--bk);border-top:1px solid var(--bk);transform:rotate(45deg)}
+.dnext:hover .dnarr{width:80px}
+
+@media(max-width:900px){
+  .masonry{columns:2}
+  .dlayout{grid-template-columns:1fr}
+  .dside{position:static;height:auto;border-right:none;border-bottom:1px solid var(--br)}
+  .hcats{grid-template-columns:1fr}
+  .hcat{border-right:none;border-bottom:1px solid var(--br)}
+}
+@media(max-width:600px){
+  .masonry{columns:1}
+  header{padding:0 20px}
+  .nav-r{gap:20px}
+  .topbar{padding:0 16px;gap:12px}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+
+<header>
+  <div class="nav-logo" onclick="go('home')" style="cursor:none"><em>Valentin BABEY</em></div>
+  <div class="nav-r">
+    <span class="nl" onclick="go('commercial')">Commercial</span>
+    <span class="nl" onclick="go('reailized')">ReAIlized Lab</span>
+    <span class="nl">Contact</span>
+  </div>
+</header>
+
+<!-- ═══ HOME ═══ -->
+<div id="home" class="page active">
+  <!-- Scrollable photo background -->
+  <div class="hero-scroll" id="heroScroll">
+    <div class="scatter-tall">
+      <div class="scatter" id="scatter"></div>
+    </div>
+  </div>
+  <!-- Radial white mask -->
+  <div class="hmask"></div>
+  <!-- Fixed: name + role -->
+  <div class="hcenter">
+    <h1 class="hname"><em>Valentin</em> BABEY</h1>
+    <p class="hrole">Directeur Artistique &amp; Design</p>
+  </div>
+  <!-- Fixed: categories bar -->
+  <div class="hcats">
+    <div class="hcat" onclick="go('commercial')">
+      <div>
+        <span class="hcnum">01 —</span>
+        <span class="hcname">Com<em>mercial</em></span>
+      </div>
+      <span class="hcdesc">Marques, campagnes &amp; identités</span>
+      <span class="harr"></span>
+    </div>
+    <div class="hcat" onclick="go('reailized')">
+      <div>
+        <span class="hcnum">02 —</span>
+        <span class="hcname">ReAI<em>lized Lab</em></span>
+      </div>
+      <span class="hcdesc">IA générative &amp; expérimental</span>
+      <span class="harr"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMMERCIAL ═══ -->
+<div id="commercial" class="page cat-page">
+  <div class="ed-nav">
+    <button class="back-btn" onclick="go('home')"><span class="bline"></span><span>Retour</span></button>
+  </div>
+  <h2 class="ed-page-title">Com<em>mercial</em></h2>
+  <div class="ed-grid" id="gc"></div>
+  <footer><span>© Valentin BABEY — 2024</span><span>Commercial</span></footer>
+</div>
+
+<!-- ═══ REAILIZED ═══ -->
+<div id="reailized" class="page cat-page">
+  <div class="ed-nav">
+    <button class="back-btn" onclick="go('home')"><span class="bline"></span><span>Retour</span></button>
+  </div>
+  <h2 class="ed-page-title">ReAI<em>lized Lab</em></h2>
+  <div class="ed-grid" id="gr"></div>
+  <footer><span>© Valentin BABEY — 2024</span><span>ReAIlized Lab</span></footer>
+</div>
+
+<!-- ═══ PROJECT DETAIL ═══ -->
+<div id="project-detail" class="page">
+  <div class="dtopbar">
+    <button class="back-btn" id="dback"><span class="bline"></span><span>Retour</span></button>
+    <span style="color:var(--lg);font-size:12px">/</span>
+    <span class="dtopbar-proj" id="dtop-proj"></span>
+  </div>
+  <div class="dlayout">
+    <aside class="dside">
+      <h1 class="dside-title" id="dtitle"></h1>
+      <div class="dside-cat"><span class="cat-dot"></span><span id="dcat"></span></div>
+      <div id="dmeta"></div>
+      <p class="dbio" id="dbio"></p>
+    </aside>
+    <main>
+      <div class="dgallery" id="dgallery">
+        <div class="hslider" id="hslider"></div>
+        <div class="galcount"><span class="galcount-cur" id="galcur">01</span> / <span id="galtotal">01</span></div>
+        <div class="galnav">
+          <button class="galnav-btn" id="galprev" onclick="galMove(-1)"><span class="garrow left"></span></button>
+          <button class="galnav-btn" id="galnext" onclick="galMove(1)"><span class="garrow right"></span></button>
+        </div>
+        <div class="galprogress"><div class="galprogress-fill" id="galprogress"></div></div>
+      </div>
+      <div class="dnext" id="dnext">
+        <span class="dnext-label">Projet suivant</span>
+        <span class="dnext-title" id="dnext-title"></span>
+        <span class="dnarr"></span>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* DATA */
+const COM=[
+  {id:'c1',title:'Campaign Lumière',cat:'campagne',year:'2024',client:'Maison Lerouge',role:'Direction artistique',bio:"Construite autour de la lumière naturelle et de l'architecture brutale. Chaque image cherche l'équilibre entre rigueur formelle et humanité.",thumb:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80',c:'med'}],[{u:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=1400&q=80',c:'short'}]],next:'c2'},
+  {id:'c2',title:'Mode Éditoriale',cat:'editorial',year:'2024',client:'Magazine Forma',role:'Photographie & Post-prod',bio:"Un éditorial pensé comme une séquence cinématographique. La narration prime sur l'exposition du vêtement.",thumb:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=900&q=80',c:'med'}]],next:'c3'},
+  {id:'c3',title:'Identité Sonore',cat:'branding',year:'2023',client:'Studio Fréquence',role:'Direction créative',bio:"Traduire le son en image. Un exercice de synesthésie pour l'identité d'un studio parisien.",thumb:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&q=80',c:'med'}]],next:'c4'},
+  {id:'c4',title:'Urban Fragment',cat:'campagne',year:'2023',client:'Agence Nouvelle',role:'Photographie',bio:"Les fragments d'architecture urbaine que l'œil quotidien ne voit plus. L'ordinaire rendu extraordinaire.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
+  {id:'c5',title:'Horizon Series',cat:'editorial',year:'2023',client:'Collectif Bord',role:'DA & Photographie',bio:"Portraits en bord de mer, à l'heure où la lumière et l'eau se confondent.",thumb:'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80',c:'tall'}]],next:'c6'},
+  {id:'c6',title:'Nocturne',cat:'branding',year:'2022',client:'Nuit Blanche Paris',role:'Identité visuelle',bio:"Identité construite sur l'abstraction nocturne. Formes douces et typographie tendue.",thumb:'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1493780474015-ba834fd0ce2f?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80',c:'med'}]],next:'c1'},
+];
+const REA=[
+  {id:'r1',title:'Synthetic Dreams',cat:'génératif',year:'2024',client:'Recherche perso.',role:'Conception & Direction IA',bio:"Dialogue entre l'intention humaine et l'hallucination algorithmique dans les espaces latents des modèles de diffusion.",thumb:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=900&q=80',c:'med'}]],next:'r2'},
+  {id:'r2',title:'Neural Portraits',cat:'portrait',year:'2024',client:'Recherche perso.',role:'Photo & Direction IA',bio:"Portraits hybrides nés de la fusion entre photographie argentique et génération neurale.",thumb:'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=900&q=80',c:'med'}]],next:'r3'},
+  {id:'r3',title:'Latent Spaces',cat:'expérimental',year:'2024',client:'Exposition collective',role:'Artiste',bio:"Exploration des zones intermédiaires des modèles génératifs — images qui existent entre deux concepts.",thumb:'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',c:'tall'}]],next:'r4'},
+  {id:'r4',title:'Data Textures',cat:'génératif',year:'2023',client:'Recherche perso.',role:'Conception & DA',bio:"Des textures générées à partir de jeux de données réels. La donnée brute comme matière première visuelle.",thumb:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=900&q=80',c:'med'}]],next:'r5'},
+  {id:'r5',title:'Hallucinations',cat:'expérimental',year:'2024',client:'Galerie Format',role:'Création digitale',bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80',c:'tall'}]],next:'r1'},
+];
+const ALL={};[...COM,...REA].forEach(p=>ALL[p.id]=p);
+
+/* SCATTER — single continuous flow, no overlap, no rotation */
+const scatterImgs=[COM[0],COM[1],REA[0],REA[1],COM[3],REA[2],COM[4],COM[2],REA[3],COM[5],REA[4],COM[1]];
+
+// Layout: images placed in a single uninterrupted flow across 320vh
+// Two-column irregular rhythm — left / right alternating with varied heights
+// No rotation, no overlap, generous gaps
+const pos=[
+  // pair 1 — left high, right drops 6vh
+  {x:2,   y:8,   w:38, h:50, d:80},
+  {x:55,  y:14,  w:36, h:42, d:160},
+  // pair 2 — left starts near where right ended, right drops again
+  {x:4,   y:38,  w:32, h:46, d:240},
+  {x:56,  y:44,  w:38, h:54, d:180},
+  // pair 3
+  {x:3,   y:70,  w:40, h:48, d:300},
+  {x:54,  y:76,  w:34, h:44, d:140},
+  // pair 4
+  {x:5,   y:102, w:36, h:52, d:220},
+  {x:57,  y:108, w:36, h:46, d:360},
+  // pair 5
+  {x:2,   y:136, w:42, h:50, d:200},
+  {x:54,  y:142, w:36, h:44, d:280},
+  // pair 6
+  {x:4,   y:170, w:38, h:48, d:320},
+  {x:56,  y:176, w:34, h:42, d:160},
+];
+const sc=document.getElementById('scatter');
+scatterImgs.forEach((p,i)=>{
+  const d=document.createElement('div');
+  d.className='sc';
+  const s=pos[i];
+  d.style.cssText=`left:${s.x}%;top:${s.y}%;width:${s.w}%;height:${s.h}vh;animation-delay:${s.d}ms`;
+  d.innerHTML=`<img src="${p.thumb}" alt="">`;
+  sc.appendChild(d);
+});
+
+/* BUILD GRIDS */
+function buildEditorialGrid(el, data){
+  // Pair projects into rows of 2
+  let rows = '';
+  for(let i=0; i<data.length; i+=2){
+    const a = data[i], b = data[i+1];
+    rows += `<div class="ed-row">
+      <div class="ed-item" onclick="showProj('${a.id}')">
+        <img src="${a.thumb}" alt="${a.title}" loading="lazy">
+        <div class="ed-overlay">
+          <div class="ed-title">${a.title}</div>
+          <div class="ed-cat">${a.cat} — ${a.year}</div>
+        </div>
+      </div>`;
+    if(b){
+      rows += `<div class="ed-item" onclick="showProj('${b.id}')">
+        <img src="${b.thumb}" alt="${b.title}" loading="lazy">
+        <div class="ed-overlay">
+          <div class="ed-title">${b.title}</div>
+          <div class="ed-cat">${b.cat} — ${b.year}</div>
+        </div>
+      </div>`;
+    }
+    rows += `</div>`;
+  }
+  el.innerHTML = rows;
+}
+
+function buildGrid(el,data){
+  el.innerHTML=data.map(p=>`
+    <div class="pcard" data-cat="${p.cat}" onclick="showProj('${p.id}')">
+      <img src="${p.thumb}" alt="${p.title}" loading="lazy">
+      <div class="pcard-info">
+        <div class="pcard-title">${p.title}</div>
+        <div class="pcard-cat">${p.cat} — ${p.year}</div>
+      </div>
+    </div>`).join('');
+}
+buildEditorialGrid(document.getElementById('gc'), COM);
+buildEditorialGrid(document.getElementById('gr'),REA);
+
+/* FILTER */
+function filt(pg,f,btn){
+  const filtId=pg==='commercial'?'fc':'fr';
+  document.querySelectorAll(`#${filtId} .fbtn`).forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const gridId=pg==='commercial'?'gc':'gr';
+  document.querySelectorAll(`#${gridId} .pcard`).forEach(c=>{
+    c.classList.toggle('hidden',f!=='all'&&c.dataset.cat!==f);
+  });
+}
+
+/* PAGE NAV */
+let fromPage='commercial';
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showProj(id){
+  const p=ALL[id];if(!p)return;
+  // detect origin
+  fromPage=REA.find(r=>r.id===id)?'reailized':'commercial';
+  document.getElementById('dback').onclick=()=>go(fromPage);
+  document.getElementById('dtop-proj').textContent=p.title;
+  // italic first word
+  const words=p.title.split(' ');
+  document.getElementById('dtitle').innerHTML=`<em>${words[0]}</em> ${words.slice(1).join(' ')}`;
+  document.getElementById('dcat').textContent=p.cat;
+  document.getElementById('dbio').textContent=p.bio;
+  document.getElementById('dmeta').innerHTML=[
+    {l:'Client',v:p.client},{l:'Rôle',v:p.role},{l:'Année',v:p.year},{l:'Catégorie',v:p.cat}
+  ].map(m=>`<div class="dmeta-item"><div class="dmeta-label">${m.l}</div><div class="dmeta-val">${m.v}</div></div>`).join('');
+  // Flatten all images from gallery rows into individual slides
+  const allImgs=p.gallery.flat();
+  let galIdx=0;
+  const slider=document.getElementById('hslider');
+  slider.innerHTML=allImgs.map((img,i)=>`
+    <div class="hslide">
+      <img src="${img.u}" alt="" loading="${i===0?'eager':'lazy'}">
+      <span class="hslide-caption">${String(i+1).padStart(2,'0')} / ${String(allImgs.length).padStart(2,'0')}</span>
+    </div>`).join('');
+  document.getElementById('galtotal').textContent=String(allImgs.length).padStart(2,'0');
+  document.getElementById('galcur').textContent='01';
+  document.getElementById('galprogress').style.width=`${(1/allImgs.length)*100}%`;
+  slider.style.transform='translateX(0)';
+
+  window._galImgs=allImgs;
+  window._galIdx=0;
+
+  // keyboard nav
+  document.onkeydown=e=>{
+    if(e.key==='ArrowRight') galMove(1);
+    if(e.key==='ArrowLeft') galMove(-1);
+  };
+
+  // touch/swipe
+  let tsX=0;
+  slider.ontouchstart=e=>{tsX=e.touches[0].clientX};
+  slider.ontouchend=e=>{
+    const dx=e.changedTouches[0].clientX-tsX;
+    if(Math.abs(dx)>50) galMove(dx<0?1:-1);
+  };
+  const nxt=ALL[p.next];
+  if(nxt){document.getElementById('dnext-title').textContent=nxt.title;document.getElementById('dnext').onclick=()=>showProj(p.next);}
+  go('project-detail');
+}
+
+/* GALLERY NAV */
+function galMove(dir){
+  const imgs=window._galImgs||[];
+  if(!imgs.length) return;
+  window._galIdx=Math.max(0,Math.min(imgs.length-1,window._galIdx+dir));
+  const i=window._galIdx;
+  document.getElementById('hslider').style.transform=`translateX(-${i*100}%)`;
+  document.getElementById('galcur').textContent=String(i+1).padStart(2,'0');
+  document.getElementById('galprogress').style.width=`${((i+1)/imgs.length)*100}%`;
+  // update nav opacity
+  document.getElementById('galprev').style.opacity=i===0?'0.3':'1';
+  document.getElementById('galnext').style.opacity=i===imgs.length-1?'0.3':'1';
+}
+
+/* CURSOR */
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+document.querySelectorAll('button,.hcat,.pcard,.dnext,.nl,.nav-logo').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+</script>
+</body>
+</html>
