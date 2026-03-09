@@ -197,6 +197,22 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
   .nav-r{gap:20px}
   .topbar{padding:0 16px;gap:12px}
 }
+
+/* ── CONTACT POPUP ── */
+.cpop{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.cpop.open{opacity:1;pointer-events:all}
+.cpop-bg{position:absolute;inset:0;background:rgba(255,255,255,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.cpop-box{position:relative;z-index:1;text-align:center;padding:80px 60px;max-width:560px;width:90%}
+.cpop-close{position:absolute;top:32px;right:32px;background:none;border:none;cursor:none;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gr);transition:color .2s}
+.cpop-close:hover{color:var(--bk)}
+.cpop-name{font-family:'EB Garamond',serif;font-size:clamp(38px,5vw,72px);font-weight:400;letter-spacing:-.03em;line-height:1;margin-bottom:24px}
+.cpop-name em{font-style:italic}
+.cpop-intro{font-size:12px;line-height:2;color:var(--gr);letter-spacing:.04em;margin-bottom:48px;max-width:380px;margin-left:auto;margin-right:auto}
+.cpop-links{display:flex;flex-direction:column;gap:14px;align-items:center}
+.cpop-link{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--bk);text-decoration:none;cursor:none;position:relative;display:inline-block}
+.cpop-link::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--bk);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.76,0,.24,1)}
+.cpop-link:hover::after{transform:scaleX(1)}
+.cpop-sep{width:1px;height:32px;background:var(--br)}
 </style>
 </head>
 <body>
@@ -207,7 +223,7 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
   <div class="nav-r">
     <span class="nl" onclick="go('commercial')">Commercial</span>
     <span class="nl" onclick="go('reailized')">ReAIlized Lab</span>
-    <span class="nl">Contact</span>
+    <span class="nl" onclick="openContact()">Contact</span>
   </div>
 </header>
 
@@ -303,7 +319,7 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
 <script>
 /* DATA */
 const COM=[
-  {id:'c1',title:'La Patate Douce Radio',cat:'illustration',year:'2024',client:'La Patate Douce Radio',role:'Direction artistique',bio:"Un projet visuel construit autour de l'univers sonore et culturel de la radio.",thumb:'https://github.com/babeyvalentin/PORTFOLIO-VB/blob/main/images%3A/c1-cover.jpeg',gallery:[[{u:'images/c1-photo1.jpeg',c:'tall'}]],next:'c2'},
+  {id:'c1',title:'La Patate Douce Radio',cat:'illustration',year:'2024',client:'La Patate Douce Radio',role:'Direction artistique',bio:"Un projet visuel construit autour de l'univers sonore et culturel de la radio.",thumb:'images/cover1.jpeg',gallery:[[{u:'images/cover1.jpeg',c:'tall'}]],next:'c2'},
   {id:'c2',title:'Sacha Watches',cat:'branding',year:'2024',client:'Sacha Watches',role:'Direction artistique',bio:"Un projet de branding pensé autour de l'élégance et de la précision horlogère.",thumb:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=900&q=80',c:'med'}]],next:'c3'},
   {id:'c3',title:'Yves Saint Laurent - Waterstain',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction créative',bio:"Campagne pensée autour de l'eau et de la matière. Une exploration sensorielle de la marque.",thumb:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&q=80',c:'med'}]],next:'c4'},
   {id:'c4',title:'Yves Saint Laurent - CHIXI',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction artistique',bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
@@ -485,6 +501,32 @@ document.querySelectorAll('button,.hcat,.pcard,.dnext,.nl,.nav-logo').forEach(el
   el.addEventListener('mouseenter',()=>cur.classList.add('big'));
   el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
 });
+
+function openContact(){
+  document.getElementById('cpop').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeContact(){
+  document.getElementById('cpop').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeContact();});
 </script>
+
+<!-- ═══ CONTACT POPUP ═══ -->
+<div class="cpop" id="cpop">
+  <div class="cpop-bg" onclick="closeContact()"></div>
+  <div class="cpop-box">
+    <button class="cpop-close" onclick="closeContact()">Fermer ×</button>
+    <h2 class="cpop-name"><em>Valentin</em> BABEY</h2>
+    <p class="cpop-intro">Directeur artistique basé à Paris,<br>disponible pour des projets en branding,<br>campagne & direction créative.</p>
+    <div class="cpop-links">
+      <a class="cpop-link" href="mailto:votre@email.com">babeyvalentin@gmail.com</a>
+      <div class="cpop-sep"></div>
+      <a class="cpop-link" href="https://instagram.com/" target="_blank">Instagram</a>
+      <a class="cpop-link" href="https://www.linkedin.com/in/valentin-babey-466975146/" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</div>
 </body>
 </html>
