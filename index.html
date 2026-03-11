@@ -13,7 +13,7 @@ html{font-size:15px}
 body{background:var(--w);color:var(--bk);font-family:'DM Mono',monospace;cursor:none;-webkit-font-smoothing:antialiased}
 
 /* CURSOR */
-#cur{position:fixed;width:8px;height:8px;background:var(--bk);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s;mix-blend-mode:difference}
+#cur{position:fixed;width:8px;height:8px;background:rgba(30,30,30,.55);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s}
 #cur.big{width:40px;height:40px}
 
 /* PAGES */
@@ -42,8 +42,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:400;background:var(--w);heigh
 .hmask{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 42% 40% at 50% 50%,rgba(255,255,255,.99) 0%,rgba(255,255,255,.95) 28%,rgba(255,255,255,.6) 52%,rgba(255,255,255,.15) 72%,transparent 90%)}
 
 /* Fixed center — name + role */
-.hcenter{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);z-index:3;text-align:center;pointer-events:none}
-.hname{font-family:'EB Garamond',serif;font-size:clamp(48px,8.5vw,130px);font-weight:400;line-height:1;letter-spacing:-.03em;color:var(--bk);white-space:nowrap;opacity:0;animation:up 1s cubic-bezier(.16,1,.3,1) .1s forwards}
+.hcenter{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) translateZ(0);z-index:1002;text-align:center;pointer-events:none;will-change:transform;-webkit-transition:transform .65s cubic-bezier(.76,0,.24,1);transition:transform .65s cubic-bezier(.76,0,.24,1)}
+.hname{font-family:'EB Garamond',serif;font-size:clamp(48px,8.5vw,130px);font-weight:400;line-height:1;letter-spacing:-.03em;color:var(--bk);white-space:nowrap;opacity:0;animation:up 1s cubic-bezier(.16,1,.3,1) .1s forwards;-webkit-transition:transform .65s cubic-bezier(.76,0,.24,1),opacity .4s ease;transition:transform .65s cubic-bezier(.76,0,.24,1),opacity .4s ease;will-change:transform;transform-origin:center center}
 .hname em{font-style:italic}
 .hrole{margin-top:16px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gr);opacity:0;animation:up .8s ease .5s forwards}
 @keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -199,15 +199,15 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
 }
 
 /* ── CONTACT POPUP ── */
-.cpop{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.cpop{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-start;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .cpop.open{opacity:1;pointer-events:all}
-.cpop-bg{position:absolute;inset:0;background:rgba(255,255,255,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-.cpop-box{position:relative;z-index:1;text-align:center;padding:80px 60px;max-width:560px;width:90%}
+.cpop-bg{position:absolute;inset:0;background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.cpop-box{position:relative;z-index:1001;text-align:center;padding:0 60px;max-width:560px;width:90%;display:flex;flex-direction:column;align-items:center;margin-top:52vh}
 .cpop-close{position:absolute;top:32px;right:32px;background:none;border:none;cursor:none;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gr);transition:color .2s}
 .cpop-close:hover{color:var(--bk)}
-.cpop-name{font-family:'EB Garamond',serif;font-size:clamp(38px,5vw,72px);font-weight:400;letter-spacing:-.03em;line-height:1;margin-bottom:24px}
+.cpop-name{font-family:'EB Garamond',serif;font-size:clamp(38px,5vw,72px);font-weight:400;letter-spacing:-.03em;line-height:1;margin-bottom:24px;visibility:hidden}
 .cpop-name em{font-style:italic}
-.cpop-intro{font-size:12px;line-height:2;color:var(--gr);letter-spacing:.04em;margin-bottom:48px;max-width:380px;margin-left:auto;margin-right:auto}
+.cpop-intro{font-size:12px;line-height:2;color:var(--gr);letter-spacing:.04em;margin-bottom:48px;max-width:380px;margin-left:auto;margin-right:auto;margin-top:0}
 .cpop-links{display:flex;flex-direction:column;gap:14px;align-items:center}
 .cpop-link{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--bk);text-decoration:none;cursor:none;position:relative;display:inline-block}
 .cpop-link::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--bk);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.76,0,.24,1)}
@@ -227,6 +227,12 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
   </div>
 </header>
 
+<!-- Global name — visible on home + contact -->
+<div class="hcenter" id="hcenter">
+  <h1 class="hname"><em>Valentin</em> BABEY</h1>
+  <p class="hrole">Directeur Artistique &amp; Design</p>
+</div>
+
 <!-- ═══ HOME ═══ -->
 <div id="home" class="page active">
   <!-- Scrollable photo background -->
@@ -237,11 +243,6 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
   </div>
   <!-- Radial white mask -->
   <div class="hmask"></div>
-  <!-- Fixed: name + role -->
-  <div class="hcenter">
-    <h1 class="hname"><em>Valentin</em> BABEY</h1>
-    <p class="hrole">Directeur Artistique</p>
-  </div>
   <!-- Fixed: categories bar -->
   <div class="hcats">
     <div class="hcat" onclick="go('commercial')">
@@ -319,7 +320,7 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
 <script>
 /* DATA */
 const COM=[
-  {id:'c1',title:'La Patate Douce Radio',cat:'illustration',year:'2024',client:'La Patate Douce Radio',role:'Direction artistique',bio:"Un projet visuel construit autour de l'univers sonore et culturel de la radio.",thumb:'images/c1-cover.jpeg',gallery:[[{u:'images/c1-photo1.1.jpeg',c:'tall'}]],next:'c2'},
+  {id:'c1',title:'La Patate Douce Radio',cat:'illustration',year:'2024',client:'La Patate Douce Radio',role:'Direction artistique',bio:"Un projet visuel construit autour de l'univers sonore et culturel de la radio.",thumb:'images/cover1.jpeg',gallery:[[{u:'images/cover1.jpeg',c:'tall'}]],next:'c2'},
   {id:'c2',title:'Sacha Watches',cat:'branding',year:'2024',client:'Sacha Watches',role:'Direction artistique',bio:"Un projet de branding pensé autour de l'élégance et de la précision horlogère.",thumb:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=900&q=80',c:'med'}]],next:'c3'},
   {id:'c3',title:'Yves Saint Laurent - Waterstain',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction créative',bio:"Campagne pensée autour de l'eau et de la matière. Une exploration sensorielle de la marque.",thumb:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&q=80',c:'med'}]],next:'c4'},
   {id:'c4',title:'Yves Saint Laurent - CHIXI',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction artistique',bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
@@ -429,6 +430,13 @@ function go(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+  // Show hcenter only on home page
+  const hc   = document.getElementById('hcenter');
+  const hname = hc ? hc.querySelector('.hname') : null;
+  if(hc){
+    hc.style.opacity    = (id==='home') ? '1' : '0';
+    if(hname) hname.style.opacity = (id==='home') ? '1' : '0';
+  }
 }
 
 function showProj(id){
@@ -503,13 +511,68 @@ document.querySelectorAll('button,.hcat,.pcard,.dnext,.nl,.nav-logo').forEach(el
 });
 
 function openContact(){
-  document.getElementById('cpop').classList.add('open');
-  document.body.style.overflow='hidden';
+  const name  = document.querySelector('.hname');
+  const center= document.querySelector('.hcenter');
+  const hrole = document.querySelector('.hrole');
+  const cpop  = document.getElementById('cpop');
+
+  // Calculate scale ratio between contact size and home size
+  const vw = window.innerWidth;
+  const homeSize  = Math.min(Math.max(vw * 0.085, 48), 130);
+  const contSize  = Math.min(Math.max(vw * 0.05,  38), 72);
+  const ratio = contSize / homeSize;
+
+  // Make sure hcenter is visible regardless of which page we're on
+  center.style.opacity = '1';
+  name.style.opacity   = '1';
+  name.style.animation = 'none';
+
+  // Scale down in place, then shift up
+  name.style.transform   = `scale(${ratio})`;
+  center.style.transform = `translate(-50%, -50%) translateZ(0) translateY(-90px)`;
+  if(hrole) hrole.style.opacity = '0';
+
+  // Fade in backdrop + content slightly after
+  setTimeout(()=>{
+    cpop.style.transition = 'opacity .45s ease';
+    cpop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }, 100);
 }
+
 function closeContact(){
-  document.getElementById('cpop').classList.remove('open');
-  document.body.style.overflow='';
+  const name   = document.querySelector('.hname');
+  const center = document.querySelector('.hcenter');
+  const hrole  = document.querySelector('.hrole');
+  const cpop   = document.getElementById('cpop');
+
+  // Detect if we're on a page other than home
+  const onHome = document.getElementById('home').classList.contains('active');
+
+  // Fade out popup
+  cpop.style.transition = 'opacity .35s ease';
+  cpop.style.opacity    = '0';
+
+  // Restore scale and position
+  setTimeout(()=>{
+    name.style.transform   = '';
+    center.style.transform = 'translate(-50%,-50%) translateZ(0)';
+    if(hrole) hrole.style.opacity = '';
+  }, 60);
+
+  setTimeout(()=>{
+    cpop.classList.remove('open');
+    cpop.style.opacity    = '';
+    cpop.style.transition = '';
+    document.body.style.overflow = '';
+    // Hide hcenter if we're not on home
+    if(!onHome){
+      center.style.opacity = '0';
+      name.style.opacity   = '0';
+    }
+  }, 420);
 }
+
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeContact();});
 </script>
 
@@ -518,15 +581,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape') closeContact();});
   <div class="cpop-bg" onclick="closeContact()"></div>
   <div class="cpop-box">
     <button class="cpop-close" onclick="closeContact()">Fermer ×</button>
-    <h2 class="cpop-name"><em>Valentin</em> BABEY</h2>
     <p class="cpop-intro">Directeur artistique basé à Paris,<br>disponible pour des projets en branding,<br>campagne & direction créative.</p>
     <div class="cpop-links">
-      <a class="cpop-link" href="mailto:votre@email.com">babeyvalentin@gmail.com</a>
+      <a class="cpop-link" href="/cdn-cgi/l/email-protection#d0a6bfa4a2b590b5bdb1b9bcfeb3bfbd"><span class="__cf_email__" data-cfemail="9bedf4efe9fedbfef6faf2f7b5f8f4f6">[email&#160;protected]</span></a>
       <div class="cpop-sep"></div>
       <a class="cpop-link" href="https://instagram.com/" target="_blank">Instagram</a>
-      <a class="cpop-link" href="https://www.linkedin.com/in/valentin-babey-466975146/" target="_blank">LinkedIn</a>
-    </div>
-  </div>
-</div>
-</body>
-</html>
