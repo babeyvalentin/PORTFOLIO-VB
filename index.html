@@ -32,9 +32,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:400;background:var(--w);heigh
 /* Scrollable scatter layer */
 .hero-scroll{position:absolute;inset:0;overflow-y:scroll;z-index:1;scrollbar-width:none}
 .hero-scroll::-webkit-scrollbar{display:none}
-.scatter-tall{position:relative;height:270vh;pointer-events:none}
+.scatter-tall{position:relative;height:270vh}
 .scatter{position:absolute;inset:0}
-.sc{position:absolute;overflow:hidden;opacity:0;animation:scIn 1.1s ease forwards}
+.sc{position:absolute;overflow:hidden;opacity:0;animation:scIn 1.1s ease forwards;pointer-events:none}
+.sc-link{cursor:none;pointer-events:all}
+.sc-overlay{position:absolute;inset:0;background:rgba(10,10,10,0);display:flex;flex-direction:column;justify-content:flex-end;padding:20px 18px;transition:background .4s ease}
+.sc-link:hover .sc-overlay{background:rgba(10,10,10,.48)}
+.sc-title{font-family:'EB Garamond',serif;font-size:clamp(14px,1.4vw,22px);font-style:italic;color:#fff;line-height:1;opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
+.sc-cat{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:5px;opacity:0;transform:translateY(4px);transition:opacity .3s ease .05s,transform .3s ease .05s}
+.sc-link:hover .sc-title,.sc-link:hover .sc-cat{opacity:1;transform:translateY(0)}
 .sc img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(6%) brightness(.9)}
 @keyframes scIn{from{opacity:0}to{opacity:1}}
 
@@ -146,11 +152,20 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
 .dmeta-val{font-size:12px;color:var(--bk);letter-spacing:.02em;line-height:1.5}
 .dbio{margin-top:28px;font-size:12px;line-height:1.8;color:var(--gr)}
 /* ── HORIZONTAL GALLERY ── */
-.dgallery{position:relative;height:calc(100vh - 104px);overflow:hidden}
+.dgallery{position:relative;height:calc(100vh - 104px);overflow:hidden;cursor:none}
+.gzone{position:absolute;top:0;bottom:0;width:50%;z-index:10}
+.gzone-l{left:0}
+.gzone-r{right:0}
+.gzone-l:hover~.gcursor,.gzone-l:hover~* .gcursor{display:none}
+/* cursor hint arrows on hover */
+.gzone-l .ghint,.gzone-r .ghint{position:absolute;top:50%;transform:translateY(-50%);opacity:0;transition:opacity .25s;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.7);font-family:'DM Mono',monospace;pointer-events:none}
+.gzone-l .ghint{left:32px}
+.gzone-r .ghint{right:32px}
+.gzone-l:hover .ghint,.gzone-r:hover .ghint{opacity:1}
 .hslider{display:flex;height:100%;transition:transform .7s cubic-bezier(.77,0,.18,1);will-change:transform}
 .hslide{flex:0 0 100%;height:100%;position:relative;overflow:hidden}
 .hslide img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
-.hslide:hover img{transform:scale(1.02)}
+
 
 /* Nav arrows */
 .galnav{position:absolute;bottom:32px;right:40px;display:flex;align-items:center;gap:16px;z-index:10}
@@ -300,12 +315,11 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
     </aside>
     <main>
       <div class="dgallery" id="dgallery">
+        <div class="gzone gzone-l" onclick="galMove(-1)"><span class="ghint">← Préc.</span></div>
+        <div class="gzone gzone-r" onclick="galMove(1)"><span class="ghint">Suiv. →</span></div>
         <div class="hslider" id="hslider"></div>
         <div class="galcount"><span class="galcount-cur" id="galcur">01</span> / <span id="galtotal">01</span></div>
-        <div class="galnav">
-          <button class="galnav-btn" id="galprev" onclick="galMove(-1)"><span class="garrow left"></span></button>
-          <button class="galnav-btn" id="galnext" onclick="galMove(1)"><span class="garrow right"></span></button>
-        </div>
+
         <div class="galprogress"><div class="galprogress-fill" id="galprogress"></div></div>
       </div>
       <div class="dnext" id="dnext">
@@ -320,7 +334,17 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
 <script>
 /* DATA */
 const COM=[
-  {id:'c1',title:'La Patate Douce Radio',cat:'illustration',year:'2024',client:'La Patate Douce Radio',role:'Direction artistique',bio:"Un projet visuel construit autour de l'univers sonore et culturel de la radio.",thumb:'images/c1-cover.jpeg',gallery:[[{u:'images/c1-photo1.1.jpeg',c:'tall'}]],next:'c2'},
+  {id:'c1',title:'La Patate Douce Radio',cat:'illustration',year:'2024',client:'La Patate Douce Radio',role:'Direction artistique',bio:"Un projet visuel construit autour de l'univers sonore et culturel de la radio.",thumb:'images/c1-cover.jpeg',gallery:[
+    [{u:'images/c1-photo1.jpeg',c:'tall'}],
+    [{u:'images/c1-photo1.1.jpeg',c:'tall'},{u:'images/c1-photo1.2.jpeg',c:'tall'}],
+    [{u:'images/c1-photo2.jpeg',c:'tall'}],
+    [{u:'images/c1-photo2.1.jpeg',c:'med'},{u:'images/c1-photo2.2.jpeg',c:'med'}],
+    [{u:'images/c1-photo3.jpeg',c:'tall'}],
+    [{u:'images/c1-photo3.1.jpeg',c:'med'},{u:'images/c1-photo3.2.jpeg',c:'med'}],
+    [{u:'images/c1-photo4.jpeg',c:'tall'}],
+    [{u:'images/c1-photo5.jpeg',c:'tall'}],
+    [{u:'images/c1-photo6.jpeg',c:'tall'}],
+  ],next:'c2'},
   {id:'c2',title:'Sacha Watches',cat:'branding',year:'2024',client:'Sacha Watches',role:'Direction artistique',bio:"Un projet de branding pensé autour de l'élégance et de la précision horlogère.",thumb:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=900&q=80',c:'med'}]],next:'c3'},
   {id:'c3',title:'Yves Saint Laurent - Waterstain',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction créative',bio:"Campagne pensée autour de l'eau et de la matière. Une exploration sensorielle de la marque.",thumb:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&q=80',c:'med'}]],next:'c4'},
   {id:'c4',title:'Yves Saint Laurent - CHIXI',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction artistique',bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
@@ -337,38 +361,98 @@ const REA=[
 const ALL={};[...COM,...REA].forEach(p=>ALL[p.id]=p);
 
 /* SCATTER — single continuous flow, no overlap, no rotation */
-const scatterImgs=[COM[0],COM[1],REA[0],REA[1],COM[3],REA[2],COM[4],COM[2],REA[3],COM[5],REA[4],COM[1]];
+// Shuffle images randomly each load
+const allProjs=[...COM,...REA];
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+const scatterProjs=shuffle(allProjs).slice(0,12);
 
-// Layout: images placed in a single uninterrupted flow across 320vh
-// Two-column irregular rhythm — left / right alternating with varied heights
-// No rotation, no overlap, generous gaps
-const pos=[
-  // pair 1 — left high, right drops 6vh
-  {x:2,   y:8,   w:38, h:50, d:80},
-  {x:55,  y:14,  w:36, h:42, d:160},
-  // pair 2 — left starts near where right ended, right drops again
-  {x:4,   y:38,  w:32, h:46, d:240},
-  {x:56,  y:44,  w:38, h:54, d:180},
-  // pair 3
-  {x:3,   y:70,  w:40, h:48, d:300},
-  {x:54,  y:76,  w:34, h:44, d:140},
-  // pair 4
-  {x:5,   y:102, w:36, h:52, d:220},
-  {x:57,  y:108, w:36, h:46, d:360},
-  // pair 5
-  {x:2,   y:136, w:42, h:50, d:200},
-  {x:54,  y:142, w:36, h:44, d:280},
-  // pair 6
-  {x:4,   y:170, w:38, h:48, d:320},
-  {x:56,  y:176, w:34, h:42, d:160},
+function r(min,max){return Math.random()*(max-min)+min;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+// Layout templates per block — each returns 1 or 2 positions relative to a baseY
+// x/w in %, h in vh
+const templates=[
+  // Z — left high, right lower
+  (y)=>[
+    {x:r(2,6),   y:y+r(0,4),  w:r(34,42), h:r(46,56)},
+    {x:r(54,58), y:y+r(6,12), w:r(32,40), h:r(40,50)},
+  ],
+  // Z inverse — right high, left lower
+  (y)=>[
+    {x:r(2,6),   y:y+r(6,12), w:r(32,40), h:r(40,50)},
+    {x:r(54,58), y:y+r(0,4),  w:r(34,42), h:r(46,56)},
+  ],
+  // Central solo — one wide image centered
+  (y)=>[
+    {x:r(18,26), y:y+r(0,6),  w:r(48,58), h:r(52,62)},
+  ],
+  // Off-center pair — one medium left-ish, one small far right
+  (y)=>[
+    {x:r(8,16),  y:y+r(0,5),  w:r(36,44), h:r(44,54)},
+    {x:r(60,66), y:y+r(8,16), w:r(24,32), h:r(34,44)},
+  ],
+  // Wide left + small right stacked high
+  (y)=>[
+    {x:r(1,5),   y:y+r(4,10), w:r(40,50), h:r(48,58)},
+    {x:r(56,62), y:y+r(0,5),  w:r(28,36), h:r(38,46)},
+  ],
+  // Two images close together, slightly off-center
+  (y)=>[
+    {x:r(10,18), y:y+r(0,4),  w:r(30,38), h:r(44,52)},
+    {x:r(46,54), y:y+r(6,14), w:r(32,40), h:r(40,50)},
+  ],
+  // Solo right-aligned
+  (y)=>[
+    {x:r(50,58), y:y+r(0,6),  w:r(36,44), h:r(50,60)},
+  ],
+  // Wide centered pair with gap
+  (y)=>[
+    {x:r(4,10),  y:y+r(0,6),  w:r(34,40), h:r(46,54)},
+    {x:r(58,64), y:y+r(4,10), w:r(26,34), h:r(40,48)},
+  ],
 ];
+
+function genPos(){
+  const pos=[];
+  let curY=8;
+  let imgCount=0;
+  while(imgCount<12){
+    const tpl=pick(templates);
+    const slots=tpl(curY);
+    // check we don't exceed 12 images
+    if(imgCount+slots.length>12) break;
+    const delay=[80,160,240,180,300,140,220,360,200,280,320,160];
+    slots.forEach(s=>{
+      pos.push({...s, d:delay[imgCount%delay.length]});
+      imgCount++;
+    });
+    // advance Y: step based on max height of current block + gap
+    const maxH=Math.max(...slots.map(s=>s.h));
+    curY+=maxH*0.55+r(6,14);
+  }
+  return pos;
+}
+
+const pos=genPos();
+
+// Update scatter-tall height dynamically
+const lastY=pos.length?Math.max(...pos.map(s=>s.y+s.h)):220;
+document.querySelector('.scatter-tall').style.height=(lastY+40)+'vh';
+
 const sc=document.getElementById('scatter');
-scatterImgs.forEach((p,i)=>{
+scatterProjs.slice(0,pos.length).forEach((proj,i)=>{
   const d=document.createElement('div');
-  d.className='sc';
+  d.className='sc sc-link';
   const s=pos[i];
-  d.style.cssText=`left:${s.x}%;top:${s.y}%;width:${s.w}%;height:${s.h}vh;animation-delay:${s.d}ms`;
-  d.innerHTML=`<img src="${p.thumb}" alt="">`;
+  d.style.cssText=`left:${s.x}%;top:${s.y}%;width:${s.w}%;height:${s.h}vh;animation-delay:${s.d}ms;cursor:none`;
+  d.innerHTML=`<img src="${proj.thumb}" alt="${proj.title}">
+    <div class="sc-overlay">
+      <span class="sc-title">${proj.title}</span>
+      <span class="sc-cat">${proj.cat}</span>
+    </div>`;
+  d.addEventListener('click',()=>showProj(proj.id));
+  d.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  d.addEventListener('mouseleave',()=>cur.classList.remove('big'));
   sc.appendChild(d);
 });
 
