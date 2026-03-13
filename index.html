@@ -364,7 +364,16 @@ const ALL={};[...COM,...REA].forEach(p=>ALL[p.id]=p);
 // Shuffle images randomly each load
 const allProjs=[...COM,...REA];
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-const scatterProjs=shuffle(allProjs).slice(0,12);
+
+// Build a pool of {thumb, proj} picking one random image per project (cover or gallery)
+const imgPool=[];
+allProjs.forEach(proj=>{
+  const galImgs=proj.gallery.flat().map(g=>g.u);
+  const all=[proj.thumb,...galImgs].filter(Boolean);
+  const picked=all[Math.floor(Math.random()*all.length)];
+  imgPool.push({thumb:picked, proj});
+});
+const scatterProjs=shuffle(imgPool).slice(0,12);
 
 function r(min,max){return Math.random()*(max-min)+min;}
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
@@ -440,12 +449,13 @@ const lastY=pos.length?Math.max(...pos.map(s=>s.y+s.h)):220;
 document.querySelector('.scatter-tall').style.height=(lastY+40)+'vh';
 
 const sc=document.getElementById('scatter');
-scatterProjs.slice(0,pos.length).forEach((proj,i)=>{
+scatterProjs.slice(0,pos.length).forEach((item,i)=>{
+  const {thumb, proj}=item;
   const d=document.createElement('div');
   d.className='sc sc-link';
   const s=pos[i];
   d.style.cssText=`left:${s.x}%;top:${s.y}%;width:${s.w}%;height:${s.h}vh;animation-delay:${s.d}ms;cursor:none`;
-  d.innerHTML=`<img src="${proj.thumb}" alt="${proj.title}">
+  d.innerHTML=`<img src="${thumb}" alt="${proj.title}">
     <div class="sc-overlay">
       <span class="sc-title">${proj.title}</span>
       <span class="sc-cat">${proj.cat}</span>
