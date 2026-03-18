@@ -34,7 +34,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:400;background:var(--w);heigh
 .hero-scroll::-webkit-scrollbar{display:none}
 /* ── EDITORIAL SCATTER ── */
 .scatter-tall{width:100%;min-height:100vh}
-.scatter{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;padding:20px 24px 240px;align-items:start}
+.scatter{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;padding:120px 24px 240px;align-items:start}
 .sc{position:relative;overflow:hidden;opacity:0;animation:scIn .9s ease forwards;pointer-events:none;break-inside:avoid}
 .sc-link{pointer-events:all;cursor:none}
 .sc img{width:100%;height:auto;display:block;filter:grayscale(6%) brightness(.92)}
@@ -57,7 +57,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:400;background:var(--w);heigh
 
 /* Fixed bottom categories bar */
 .hcats{position:absolute;bottom:0;left:0;right:0;z-index:3;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--br);background:var(--w);opacity:0;animation:up .8s ease .75s forwards}
-.hcat{padding:28px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;cursor:none;border-right:1px solid var(--br);transition:background .3s;position:relative;overflow:hidden}
+.hcat{padding:20px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;cursor:none;border-right:1px solid var(--br);transition:background .3s;position:relative;overflow:hidden}
 .hcat:last-child{border-right:none}
 .hcat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--bk);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.76,0,.24,1)}
 .hcat:hover{background:var(--off)}.hcat:hover::after{transform:scaleX(1)}
@@ -359,7 +359,7 @@ const REA=[
   {id:'r3',title:'Guerlain - Heure Bleue',cat:'expérimental',year:'2024',client:'Guerlain',role:'Artiste',bio:"Exploration des zones intermédiaires des modèles génératifs — images qui existent entre deux concepts.",thumb:'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',c:'tall'}]],next:'r4'},
   {id:'r4',title:'Loewe - Far & Mid West',cat:'génératif',year:'2023',client:'Loewe',role:'Conception & DA',bio:"Des textures générées à partir de jeux de données réels. La donnée brute comme matière première visuelle.",thumb:'images/r4-photo1.jpeg',gallery:[[{u:'images/r4-photo2.jpeg',c:'tall'}],[{u:'images/r4-photo3.jpeg',c:'med'},{u:'images/r4-photo4.jpeg',c:'med'},{u:'images/r4-photo1.jpeg',c:'med'}]],next:'r5'},
   {id:'r5',title:'ACNE Studio',cat:'expérimental',year:'2024',client:'ACNE Studio',role:'Création digitale',bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80',c:'tall'}]],next:'r6'},
-  {id:'r6',title:'Meller',cat:'campagne',year:'2023',client:'Meller',role:'Création print',bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'images/r6-photo1.jpeg',gallery:[[{u:'images/r6-photo1.jpeg',c:'tall'}]],next:'r7'},
+  {id:'r6',title:'Meller',cat:'campagne',year:'2023',client:'Meller',role:'Création print',bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'images/r6-photo1.jpeg',gallery:[[{u:'images/r6-photo2.jpeg',c:'tall'}]],next:'r7'},
   {id:'r7',title:'AD cover',cat:'Editoriale',year:'2023',client:'Architectural Digest',role:'Conception & redaction & DA',bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'images/r7-photo1.jpeg',gallery:[[{u:'images/r7-photo2.jpeg',c:'tall w2'},{u:'images/r7-photo1.jpeg',c:'tall'}]],next:'r1'},
 ];
 const ALL={};[...COM,...REA].forEach(p=>ALL[p.id]=p);
