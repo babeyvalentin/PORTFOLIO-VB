@@ -34,7 +34,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:400;background:var(--w);heigh
 .hero-scroll::-webkit-scrollbar{display:none}
 /* ── EDITORIAL SCATTER ── */
 .scatter-tall{width:100%;min-height:100vh}
-.scatter{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;padding:85px 24px 240px;align-items:start}
+.scatter{display:grid;grid-template-columns:repeat(12,1fr);column-gap:18px;row-gap:34px;padding:82px 56px 240px;align-items:start;}
 .sc{position:relative;overflow:hidden;opacity:0;animation:scIn .9s ease forwards;pointer-events:none;break-inside:avoid}
 .sc-link{pointer-events:all;cursor:none}
 .sc img{width:100%;height:auto;display:block;filter:grayscale(6%) brightness(.92)}
@@ -207,11 +207,39 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
   .hcats{grid-template-columns:1fr}
   .hcat{border-right:none;border-bottom:1px solid var(--br)}
 }
-@media(max-width:600px){
-  .masonry{columns:1}
-  header{padding:0 20px}
-  .nav-r{gap:20px}
-  .topbar{padding:0 16px;gap:12px}
+@media(max-width:700px){
+  .scatter{
+    grid-template-columns:repeat(6,1fr);
+    column-gap:12px;
+    row-gap:24px;
+    padding:76px 18px 180px;
+  }
+
+  .sc{
+    grid-column:auto / span 3!important;
+    margin-top:0!important;
+  }
+
+  .sc:nth-child(even){
+    transform:translateY(28px);
+  }
+
+  .sc:nth-child(3n){
+    grid-column:auto / span 4!important;
+  }
+
+  header{
+    padding:0 20px;
+  }
+
+  .nav-r{
+    gap:20px;
+  }
+
+  .topbar{
+    padding:0 16px;
+    gap:12px;
+  }
 }
 
 /* ── CONTACT POPUP ── */
@@ -427,41 +455,48 @@ const delays=[0,80,160,120,200,100,240,60,180,140,220,40];
 const rowGroups=[];
 
 // Group layouts into pairs: [[colStart,colSpan],[colStart,colSpan]] per row
-const rowLayouts=[
-  [[1,4],[7,5]],
-  [[2,6],[9,3]],
-  [[1,5],[7,4]],
-  [[3,6]],
-  [[1,3],[5,5],[10,3]],
-  [[1,6],[8,4]],
-  [[2,4],[7,5]],
-  [[1,5],[8,3]],
-  [[3,7]],
-  [[1,4],[6,6]],
+  const rowLayouts = [
+  [[1,2], [4,2], [7,2], [10,2]],
+  [[2,2], [5,2], [8,2], [11,2]],
+  [[1,3], [5,2], [9,3]],
+  [[3,2], [6,2], [10,2]],
+  [[2,3], [7,2], [10,2]],
+  [[1,2], [4,3], [8,2], [11,2]],
 ];
 
-const shuffledRows=shuffle(rowLayouts);
-let placed=0;
+  const shuffledRows = shuffle(rowLayouts);
+let placed = 0;
 
-shuffledRows.forEach(row=>{
-  if(placed>=scatterProjs.length) return;
-  // random top margin for editorial offset
-  const rowMarginTop = r(0,3)*20; // 0, 20, 40, or 60px
+shuffledRows.forEach((row, rowIndex) => {
+  if (placed >= scatterProjs.length) return;
 
-  row.forEach(([cs,cspan])=>{
-    if(placed>=scatterProjs.length) return;
-    const item=scatterProjs[placed];
-    const d=document.createElement('div');
-    d.className='sc sc-link';
-    d.style.cssText=`grid-column:${cs}/span ${cspan};margin-top:${rowMarginTop}px;animation-delay:${delays[placed]}ms`;
-    d.innerHTML=`<img src="${item.thumb}" alt="${item.proj.title}">
+  row.forEach(([cs, cspan], itemIndex) => {
+    if (placed >= scatterProjs.length) return;
+
+    const item = scatterProjs[placed];
+    const d = document.createElement('div');
+
+    const step = ((rowIndex + itemIndex) % 4) * 34;
+
+    d.className = 'sc sc-link';
+    d.style.cssText = `
+      grid-column:${cs}/span ${cspan};
+      margin-top:${step}px;
+      animation-delay:${delays[placed]}ms;
+    `;
+
+    d.innerHTML = `
+      <img src="${item.thumb}" alt="${item.proj.title}">
       <div class="sc-overlay">
         <span class="sc-title">${item.proj.title}</span>
         <span class="sc-cat">${item.proj.cat}</span>
-      </div>`;
-    d.addEventListener('click',()=>showProj(item.proj.id));
-    d.addEventListener('mouseenter',()=>cur.classList.add('big'));
-    d.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+      </div>
+    `;
+
+    d.addEventListener('click', () => showProj(item.proj.id));
+    d.addEventListener('mouseenter', () => cur.classList.add('big'));
+    d.addEventListener('mouseleave', () => cur.classList.remove('big'));
+
     sc.appendChild(d);
     placed++;
   });
