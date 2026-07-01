@@ -266,9 +266,41 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
 .cpop-link::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--bk);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.76,0,.24,1)}
 .cpop-link:hover::after{transform:scaleX(1)}
 .cpop-sep{width:1px;height:32px;background:var(--br)}
+
+/* EDITOR MODE */
+.edit-toggle{display:none;border:1px solid var(--br);padding:8px 10px;color:var(--bk);background:var(--w)}
+.local-editor .edit-toggle{display:inline-block}
+body.edit-on{cursor:auto}
+body.edit-on #cur{display:none}
+body.edit-on .ed-item,body.edit-on .hslide{outline:1px dashed rgba(17,17,17,.35);outline-offset:-8px}
+body.edit-on .ed-item::after,body.edit-on .hslide::after{content:'Déposer une image';position:absolute;left:14px;bottom:14px;z-index:20;padding:7px 9px;background:rgba(255,255,255,.88);color:var(--bk);font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:0;transition:opacity .2s}
+body.edit-on .ed-item:hover::after,body.edit-on .hslide:hover::after,body.edit-on .drop-ready::after{opacity:1}
+body.edit-on .drop-ready{outline-color:var(--bk)}
+body.edit-on .gzone{display:none}
+body.edit-on .ed-overlay{background:rgba(10,10,10,.42)}
+body.edit-on .ed-title,body.edit-on .ed-cat{opacity:1;transform:translateY(0)}
+body.edit-on [data-edit-text]{cursor:text;outline:1px dashed rgba(17,17,17,.35);outline-offset:4px}
+body.edit-on [data-edit-text]:focus{background:rgba(255,255,255,.92);color:var(--bk);outline:1px solid var(--bk)}
+body.edit-on .ed-title[data-edit-text]:focus,body.edit-on .ed-cat [data-edit-text]:focus{padding:2px 4px}
+.save-flash{animation:saveFlash .55s ease}
+@keyframes saveFlash{from{box-shadow:0 0 0 5px rgba(17,17,17,.16)}to{box-shadow:none}}
+.edit-panel{position:fixed;right:18px;bottom:18px;z-index:1200;width:min(330px,calc(100vw - 36px));background:var(--w);border:1px solid var(--br);box-shadow:0 18px 60px rgba(0,0,0,.12);padding:16px;display:none}
+body.edit-on .edit-panel{display:block}
+.edit-panel-title{font-family:'EB Garamond',serif;font-size:20px;font-style:italic;margin-bottom:8px}
+.edit-panel-text{font-size:10px;line-height:1.7;letter-spacing:.04em;color:var(--gr);margin-bottom:14px}
+.edit-steps{margin:0 0 14px 16px;color:var(--gr);font-size:10px;line-height:1.8;letter-spacing:.04em}
+.edit-actions{display:flex;gap:8px;flex-wrap:wrap}
+.edit-actions button{border:1px solid var(--br);background:var(--w);padding:9px 10px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--bk);cursor:pointer}
+.edit-actions button:hover{background:var(--off)}
+.edit-status{margin-top:12px;font-size:10px;line-height:1.6;color:var(--gr);white-space:pre-wrap}
 </style>
 </head>
 <body>
+<script>
+if(location.protocol==='http:'&&['127.0.0.1','localhost'].includes(location.hostname)){
+  document.documentElement.classList.add('local-editor');
+}
+</script>
 <div id="cur"></div>
 
 <header>
@@ -277,8 +309,26 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
     <span class="nl" onclick="go('commercial')">Commercial</span>
     <span class="nl" onclick="go('reailized')">ReAIlized Lab</span>
     <span class="nl" onclick="openContact()">Contact</span>
+    <span class="nl edit-toggle" onclick="toggleEditor()">Édition</span>
   </div>
 </header>
+
+<div class="edit-panel" id="editPanel">
+  <div class="edit-panel-title">Mode édition</div>
+  <p class="edit-panel-text">Tu es dans l'éditeur local. Les modifications sont d'abord enregistrées sur ton Mac, puis publiées sur GitHub quand tu cliques le bouton.</p>
+  <ol class="edit-steps">
+    <li>Modifie un texte ou glisse une image.</li>
+    <li>Clique Enregistrer textes.</li>
+    <li>Clique Publier GitHub.</li>
+  </ol>
+  <div class="edit-actions">
+    <button type="button" onclick="resetEditedImages()">Nettoyer aperçus</button>
+    <button type="button" onclick="saveFocusedText()">Enregistrer textes</button>
+    <button type="button" onclick="publishGithub()">Publier GitHub</button>
+    <button type="button" onclick="toggleEditor(false)">Fermer</button>
+  </div>
+  <div class="edit-status" id="editStatus">Pret. Astuce : apres avoir modifie un texte, clique Enregistrer textes.</div>
+</div>
 
 <!-- Global name — visible on home + contact -->
 <div class="hcenter" id="hcenter">
@@ -391,9 +441,9 @@ const COM=[
     [{u:'images/c1-photo5.jpeg',c:'tall'}],
     [{u:'images/c1-photo6.jpeg',c:'tall'}],
   ],next:'c2'},
-  {id:'c2',title:'Sacha Watches',cat:'branding',year:'2024',client:'Sacha Watches',role:'Direction artistique',bio:"Un projet de branding pensé autour de l'élégance et de la précision horlogère.",thumb:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80',c:'med'},{u:'https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=900&q=80',c:'med'}]],next:'c3'},
+  {id:'c2',title:'Sacha Watches',cat:'branding',year:"2023-2024",client:'Sacha Watches',role:'Direction artistique',bio:"Un projet de branding pensé autour de l'élégance et de la précision horlogère.",thumb:'images/edited/thumb-c2-20260701210452.png',gallery:[[{u:'images/edited/gallery-c2-0-20260701205924.png',c:'tall'}],[{u:'images/edited/gallery-c2-1-20260701210223.png',c:'med'},{u:'images/edited/gallery-c2-2-20260701205933.png',c:'med'}]],next:'c3'},
   {id:'c3',title:'Yves Saint Laurent - Waterstain',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction créative',bio:"Campagne pensée autour de l'eau et de la matière. Une exploration sensorielle de la marque.",thumb:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&q=80',c:'med'}]],next:'c4'},
-  {id:'c4',title:'Yves Saint Laurent - CHIXI',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction artistique',bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
+  {id:'c4',title:'Yves Saint Laurent - MYSLF',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction artistique',bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
   {id:'c5',title:'BVLGARI - Reborn Series',cat:'campagne',year:'2023',client:'BVLGARI',role:'DA & Photographie',bio:"Portraits en bord de mer, à l'heure où la lumière et l'eau se confondent.",thumb:'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80',c:'tall'}]],next:'c6'},
   {id:'c6',title:'Maison Francis Kurkdjian - Baccarat rouge 540',cat:'campagne',year:'2025',client:'Maison Francis Kurkdjian',role:'Assistant Directeur Artistique',bio:"Une direction artistique construite sur l'abstraction olfactive. Formes douces et typographie tendue.",thumb:'images/c6-photo1.jpeg',gallery:[[{u:'images/c6-photo2.jpeg',c:'tall'}],[{u:'images/c6-photo3.jpeg',c:'med'},{u:'images/c6-photo1.jpeg',c:'med'}]],next:'c7'},
   {id:'c7',title:'Givenchy beauty',cat:'E-commerce',year:'2025',client:'Givenchy beauty',role:'Assistant Directeur Artistique',bio:"Une direction artistique construite sur l'abstraction olfactive. Formes douces et typographie tendue.",thumb:'images/c7-photo1.jpg',gallery:[[{u:'images/c7-photo2.jpg',c:'tall'},{u:'images/c7-photo3.jpg',c:'tall'},{u:'images/c7-photo4.jpg',c:'tall'},{u:'images/c7-photo5.jpg',c:'tall'},{u:'images/c7-photo6.jpg',c:'tall'},{u:'images/c7-photo7.jpg',c:'tall'},{u:'images/c7-photo8.jpg',c:'tall'},{u:'images/c7-photo9.jpg',c:'tall'}]],next:'c1'},
@@ -527,18 +577,18 @@ function buildEditorialGrid(el, data){
     const a = data[i], b = data[i+1];
     rows += `<div class="ed-row">
       <div class="ed-item" onclick="showProj('${a.id}')">
-        <img src="${a.thumb}" alt="${a.title}" loading="lazy">
+        <img src="${a.thumb}" alt="${a.title}" loading="lazy" data-edit-key="thumb:${a.id}">
         <div class="ed-overlay">
-          <div class="ed-title">${a.title}</div>
-          <div class="ed-cat">${a.cat} — ${a.year}</div>
+          <div class="ed-title" data-edit-text="project:${a.id}:title">${a.title}</div>
+          <div class="ed-cat"><span data-edit-text="project:${a.id}:cat">${a.cat}</span> — <span data-edit-text="project:${a.id}:year">${a.year}</span></div>
         </div>
       </div>`;
     if(b){
       rows += `<div class="ed-item" onclick="showProj('${b.id}')">
-        <img src="${b.thumb}" alt="${b.title}" loading="lazy">
+        <img src="${b.thumb}" alt="${b.title}" loading="lazy" data-edit-key="thumb:${b.id}">
         <div class="ed-overlay">
-          <div class="ed-title">${b.title}</div>
-          <div class="ed-cat">${b.cat} — ${b.year}</div>
+          <div class="ed-title" data-edit-text="project:${b.id}:title">${b.title}</div>
+          <div class="ed-cat"><span data-edit-text="project:${b.id}:cat">${b.cat}</span> — <span data-edit-text="project:${b.id}:year">${b.year}</span></div>
         </div>
       </div>`;
     }
@@ -592,21 +642,25 @@ function showProj(id){
   fromPage=REA.find(r=>r.id===id)?'reailized':'commercial';
   document.getElementById('dback').onclick=()=>go(fromPage);
   document.getElementById('dtop-proj').textContent=p.title;
+  document.getElementById('dtop-proj').dataset.editText=`project:${p.id}:title`;
   // italic first word
   const words=p.title.split(' ');
   document.getElementById('dtitle').innerHTML=`<em>${words[0]}</em> ${words.slice(1).join(' ')}`;
+  document.getElementById('dtitle').dataset.editText=`project:${p.id}:title`;
   document.getElementById('dcat').textContent=p.cat;
+  document.getElementById('dcat').dataset.editText=`project:${p.id}:cat`;
   document.getElementById('dbio').textContent=p.bio;
+  document.getElementById('dbio').dataset.editText=`project:${p.id}:bio`;
   document.getElementById('dmeta').innerHTML=[
-    {l:'Client',v:p.client},{l:'Rôle',v:p.role},{l:'Année',v:p.year},{l:'Catégorie',v:p.cat}
-  ].map(m=>`<div class="dmeta-item"><div class="dmeta-label">${m.l}</div><div class="dmeta-val">${m.v}</div></div>`).join('');
+    {l:'Client',v:p.client,f:'client'},{l:'Rôle',v:p.role,f:'role'},{l:'Année',v:p.year,f:'year'},{l:'Catégorie',v:p.cat,f:'cat'}
+  ].map(m=>`<div class="dmeta-item"><div class="dmeta-label">${m.l}</div><div class="dmeta-val" data-edit-text="project:${p.id}:${m.f}">${m.v}</div></div>`).join('');
   // Flatten all images from gallery rows into individual slides
   const allImgs=p.gallery.flat();
   let galIdx=0;
   const slider=document.getElementById('hslider');
   slider.innerHTML=allImgs.map((img,i)=>`
     <div class="hslide">
-      <img src="${img.u}" alt="" loading="${i===0?'eager':'lazy'}">
+      <img src="${img.u}" alt="" loading="${i===0?'eager':'lazy'}" data-edit-key="gallery:${p.id}:${i}">
       <span class="hslide-caption">${String(i+1).padStart(2,'0')} / ${String(allImgs.length).padStart(2,'0')}</span>
     </div>`).join('');
   document.getElementById('galtotal').textContent=String(allImgs.length).padStart(2,'0');
@@ -633,6 +687,9 @@ function showProj(id){
   const nxt=ALL[p.next];
   if(nxt){document.getElementById('dnext-title').textContent=nxt.title;document.getElementById('dnext').onclick=()=>showProj(p.next);}
   go('project-detail');
+  refreshEditedImages();
+  setupDropTargets();
+  setupEditableText();
 }
 
 /* GALLERY NAV */
@@ -714,6 +771,258 @@ function closeContact(){
 }
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeContact();});
+
+const EDIT_DB_NAME='vb-portfolio-editor';
+const EDIT_STORE='images';
+let editDbPromise=null;
+const editUrls={};
+const canSavePermanently=location.protocol==='http:'&&['127.0.0.1','localhost'].includes(location.hostname);
+
+function openEditDb(){
+  if(editDbPromise) return editDbPromise;
+  editDbPromise=new Promise((resolve,reject)=>{
+    const req=indexedDB.open(EDIT_DB_NAME,1);
+    req.onupgradeneeded=()=>req.result.createObjectStore(EDIT_STORE,{keyPath:'key'});
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+  return editDbPromise;
+}
+
+async function saveEditedImage(key,file){
+  if(!canSavePermanently){
+    alert("Pour enregistrer définitivement, ouvre le site avec l'adresse locale d'édition : http://127.0.0.1:8787/");
+    return;
+  }
+
+  const permanent=await savePermanentImage(key,file);
+  document.querySelectorAll(`img[data-edit-key="${key}"]`).forEach(img=>{img.src=permanent.path;});
+}
+
+function fileToDataUrl(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function savePermanentImage(key,file){
+  const res=await fetch('/api/save-image',{
+    method:'POST',
+    headers:{'content-type':'application/json'},
+    body:JSON.stringify({
+      key,
+      name:file.name,
+      type:file.type,
+      dataUrl:await fileToDataUrl(file)
+    })
+  });
+  const data=await res.json();
+  if(!res.ok) throw new Error(data.error||'Enregistrement impossible.');
+  return data;
+}
+
+async function savePreviewImage(key,file){
+  const db=await openEditDb();
+  await new Promise((resolve,reject)=>{
+    const tx=db.transaction(EDIT_STORE,'readwrite');
+    tx.objectStore(EDIT_STORE).put({key,blob:file,name:file.name,updated:Date.now()});
+    tx.oncomplete=resolve;
+    tx.onerror=()=>reject(tx.error);
+  });
+  await refreshEditedImages();
+}
+
+async function getEditedImage(key){
+  const db=await openEditDb();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(EDIT_STORE,'readonly');
+    const req=tx.objectStore(EDIT_STORE).get(key);
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+
+async function refreshEditedImages(){
+  const imgs=[...document.querySelectorAll('img[data-edit-key]')];
+  await Promise.all(imgs.map(async img=>{
+    const key=img.dataset.editKey;
+    const item=await getEditedImage(key);
+    if(!item) return;
+    if(editUrls[key]) URL.revokeObjectURL(editUrls[key]);
+    editUrls[key]=URL.createObjectURL(item.blob);
+    img.src=editUrls[key];
+  }));
+}
+
+function setupDropTargets(){
+  document.querySelectorAll('img[data-edit-key]').forEach(img=>{
+    const target=img.closest('.ed-item,.hslide')||img;
+    if(target.dataset.dropReady==='1') return;
+    target.dataset.dropReady='1';
+    ['dragenter','dragover'].forEach(type=>{
+      target.addEventListener(type,e=>{
+        if(!document.body.classList.contains('edit-on')) return;
+        e.preventDefault();
+        target.classList.add('drop-ready');
+      });
+    });
+    ['dragleave','drop'].forEach(type=>{
+      target.addEventListener(type,()=>target.classList.remove('drop-ready'));
+    });
+    target.addEventListener('drop',async e=>{
+      if(!document.body.classList.contains('edit-on')) return;
+      e.preventDefault();
+      const file=[...e.dataTransfer.files].find(f=>f.type.startsWith('image/'));
+      if(!file) return;
+      try{
+        await saveEditedImage(img.dataset.editKey,file);
+      }catch(error){
+        alert(error.message||"L'image n'a pas pu être enregistrée.");
+      }
+    });
+  });
+}
+
+function updateProjectField(key,value){
+  const [,projectId,field]=key.split(':');
+  const project=ALL[projectId];
+  if(project&&field in project) project[field]=value;
+}
+
+function renderTextValue(key,value){
+  document.querySelectorAll(`[data-edit-text="${key}"]`).forEach(el=>{
+    if(document.activeElement===el) return;
+    el.textContent=value;
+    el.classList.remove('save-flash');
+    void el.offsetWidth;
+    el.classList.add('save-flash');
+  });
+}
+
+async function saveEditedText(key,value){
+  if(!canSavePermanently){
+    alert("Pour enregistrer définitivement, ouvre le site avec l'adresse locale d'édition : http://127.0.0.1:8787/");
+    return;
+  }
+  const res=await fetch('/api/save-text',{
+    method:'POST',
+    headers:{'content-type':'application/json'},
+    body:JSON.stringify({key,value})
+  });
+  const data=await res.json();
+  if(!res.ok) throw new Error(data.error||'Enregistrement impossible.');
+  updateProjectField(key,value);
+  renderTextValue(key,value);
+  const status=document.getElementById('editStatus');
+  if(status) status.textContent='Texte enregistré sur ton Mac. Clique Publier GitHub pour le mettre en ligne.';
+}
+
+function setupEditableText(){
+  document.querySelectorAll('[data-edit-text]').forEach(el=>{
+    if(el.dataset.textReady==='1') return;
+    el.dataset.textReady='1';
+    el.addEventListener('click',e=>{
+      if(!document.body.classList.contains('edit-on')) return;
+      e.stopPropagation();
+    });
+    el.addEventListener('focus',()=>{
+      el.dataset.beforeEdit=el.textContent.trim();
+    });
+    el.addEventListener('keydown',e=>{
+      if(!document.body.classList.contains('edit-on')) return;
+      if(e.key==='Enter'){
+        e.preventDefault();
+        el.blur();
+      }
+      e.stopPropagation();
+    });
+    el.addEventListener('blur',async()=>{
+      if(!document.body.classList.contains('edit-on')) return;
+      const key=el.dataset.editText;
+      const value=el.textContent.trim();
+      if(!value){
+        el.textContent=el.dataset.beforeEdit||'';
+        return;
+      }
+      if(value===(el.dataset.beforeEdit||'')) return;
+      try{
+        await saveEditedText(key,value);
+      }catch(error){
+        alert(error.message||"Le texte n'a pas pu être enregistré.");
+        el.textContent=el.dataset.beforeEdit||value;
+      }
+    });
+  });
+}
+
+function setEditableTextState(on){
+  document.querySelectorAll('[data-edit-text]').forEach(el=>{
+    el.contentEditable=on?'true':'false';
+    el.spellcheck=false;
+  });
+}
+
+function saveFocusedText(){
+  const active=document.activeElement;
+  if(active&&active.matches&&active.matches('[data-edit-text]')){
+    active.blur();
+    return;
+  }
+  const status=document.getElementById('editStatus');
+  if(status) status.textContent='Aucun texte en cours de modification. Clique un texte, modifie-le, puis clique ici.';
+}
+
+function toggleEditor(force){
+  const next=typeof force==='boolean'?force:!document.body.classList.contains('edit-on');
+  document.body.classList.toggle('edit-on',next);
+  localStorage.setItem('vb-editor-on',next?'1':'0');
+  setupEditableText();
+  setEditableTextState(next);
+  if(next) setupDropTargets();
+  const status=document.getElementById('editStatus');
+  if(next&&status) status.textContent='Pret. Astuce : apres avoir modifie un texte, clique Enregistrer textes.';
+  if(next&&!canSavePermanently){
+    setTimeout(()=>alert("Tu es sur une page ouverte en fichier. Pour rendre les changements définitifs, utilise http://127.0.0.1:8787/"),50);
+  }
+}
+
+async function resetEditedImages(){
+  const ok=confirm('Supprimer toutes les images remplacées dans ce navigateur ?');
+  if(!ok) return;
+  const db=await openEditDb();
+  await new Promise((resolve,reject)=>{
+    const tx=db.transaction(EDIT_STORE,'readwrite');
+    tx.objectStore(EDIT_STORE).clear();
+    tx.oncomplete=resolve;
+    tx.onerror=()=>reject(tx.error);
+  });
+  location.reload();
+}
+
+async function publishGithub(){
+  const status=document.getElementById('editStatus');
+  if(!canSavePermanently){
+    alert("Pour publier, ouvre le site avec l'adresse locale d'édition : http://127.0.0.1:8787/");
+    return;
+  }
+  status.textContent='Publication vers GitHub en cours...';
+  try{
+    const res=await fetch('/api/publish-github',{method:'POST'});
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Publication impossible.');
+    status.textContent=data.changed?'Publié sur GitHub. GitHub Pages peut mettre une minute à se mettre à jour.':'Aucun changement à publier.';
+  }catch(error){
+    status.textContent=(error.message||'Publication impossible.')+'\nUtilise PUBLIER_GITHUB.command si GitHub demande une connexion.';
+  }
+}
+
+refreshEditedImages();
+setupDropTargets();
+setupEditableText();
+if(localStorage.getItem('vb-editor-on')==='1') toggleEditor(true);
 </script>
 
 <!-- ═══ CONTACT POPUP ═══ -->
@@ -726,3 +1035,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape') closeContact();});
       <a class="cpop-link" href="/cdn-cgi/l/email-protection#d0a6bfa4a2b590b5bdb1b9bcfeb3bfbd"><span class="__cf_email__" data-cfemail="9bedf4efe9fedbfef6faf2f7b5f8f4f6">[email&#160;protected]</span></a>
       <div class="cpop-sep"></div>
       <a class="cpop-link" href="https://instagram.com/" target="_blank">Instagram</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
