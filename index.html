@@ -443,7 +443,7 @@ const COM=[
   ],next:'c2'},
   {id:'c2',title:'Sacha Watches',cat:'branding',year:"2023-2024",client:'Sacha Watches',role:'Direction artistique',bio:"Un projet de branding pensé autour de l'élégance et de la précision horlogère.",thumb:'images/edited/thumb-c2-20260701210452.png',gallery:[[{u:'images/edited/gallery-c2-0-20260701205924.png',c:'tall'}],[{u:'images/edited/gallery-c2-1-20260701210223.png',c:'med'},{u:'images/edited/gallery-c2-2-20260701205933.png',c:'med'}]],next:'c3'},
   {id:'c3',title:'Yves Saint Laurent - Waterstain',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction créative',bio:"Campagne pensée autour de l'eau et de la matière. Une exploration sensorielle de la marque.",thumb:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&q=80',c:'med'}]],next:'c4'},
-  {id:'c4',title:'Yves Saint Laurent - MYSLF',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction artistique',bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=1400&q=85',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
+  {id:'c4',title:'Yves Saint Laurent - MYSLF',cat:'campagne',year:"2026",client:'Yves Saint Laurent',role:"Assistant directeur artistique",bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'images/edited/gallery-c4-0-20260705112737.jpg',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
   {id:'c5',title:'BVLGARI - Reborn Series',cat:'campagne',year:'2023',client:'BVLGARI',role:'DA & Photographie',bio:"Portraits en bord de mer, à l'heure où la lumière et l'eau se confondent.",thumb:'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80',c:'tall'}]],next:'c6'},
   {id:'c6',title:'Maison Francis Kurkdjian - Baccarat rouge 540',cat:'campagne',year:'2025',client:'Maison Francis Kurkdjian',role:'Assistant Directeur Artistique',bio:"Une direction artistique construite sur l'abstraction olfactive. Formes douces et typographie tendue.",thumb:'images/c6-photo1.jpeg',gallery:[[{u:'images/c6-photo2.jpeg',c:'tall'}],[{u:'images/c6-photo3.jpeg',c:'med'},{u:'images/c6-photo1.jpeg',c:'med'}]],next:'c7'},
   {id:'c7',title:'Givenchy beauty',cat:'E-commerce',year:'2025',client:'Givenchy beauty',role:'Assistant Directeur Artistique',bio:"Une direction artistique construite sur l'abstraction olfactive. Formes douces et typographie tendue.",thumb:'images/c7-photo1.jpg',gallery:[[{u:'images/c7-photo2.jpg',c:'tall'},{u:'images/c7-photo3.jpg',c:'tall'},{u:'images/c7-photo4.jpg',c:'tall'},{u:'images/c7-photo5.jpg',c:'tall'},{u:'images/c7-photo6.jpg',c:'tall'},{u:'images/c7-photo7.jpg',c:'tall'},{u:'images/c7-photo8.jpg',c:'tall'},{u:'images/c7-photo9.jpg',c:'tall'}]],next:'c1'},
@@ -776,6 +776,7 @@ const EDIT_DB_NAME='vb-portfolio-editor';
 const EDIT_STORE='images';
 let editDbPromise=null;
 const editUrls={};
+const dirtyTexts={};
 const canSavePermanently=location.protocol==='http:'&&['127.0.0.1','localhost'].includes(location.hostname);
 
 function openEditDb(){
@@ -797,6 +798,8 @@ async function saveEditedImage(key,file){
 
   const permanent=await savePermanentImage(key,file);
   document.querySelectorAll(`img[data-edit-key="${key}"]`).forEach(img=>{img.src=permanent.path;});
+  const status=document.getElementById('editStatus');
+  if(status) status.textContent='Image enregistrée sur ton Mac. Clique Publier GitHub pour la mettre en ligne.';
 }
 
 function fileToDataUrl(file){
@@ -916,6 +919,7 @@ async function saveEditedText(key,value){
   if(!res.ok) throw new Error(data.error||'Enregistrement impossible.');
   updateProjectField(key,value);
   renderTextValue(key,value);
+  delete dirtyTexts[key];
   const status=document.getElementById('editStatus');
   if(status) status.textContent='Texte enregistré sur ton Mac. Clique Publier GitHub pour le mettre en ligne.';
 }
@@ -930,6 +934,12 @@ function setupEditableText(){
     });
     el.addEventListener('focus',()=>{
       el.dataset.beforeEdit=el.textContent.trim();
+    });
+    el.addEventListener('input',()=>{
+      if(!document.body.classList.contains('edit-on')) return;
+      dirtyTexts[el.dataset.editText]=el.textContent.trim();
+      const status=document.getElementById('editStatus');
+      if(status) status.textContent='Modification en cours. Clique Enregistrer textes pour sauvegarder.';
     });
     el.addEventListener('keydown',e=>{
       if(!document.body.classList.contains('edit-on')) return;
@@ -965,14 +975,31 @@ function setEditableTextState(on){
   });
 }
 
-function saveFocusedText(){
+async function saveAllDirtyText(){
+  const entries=Object.entries(dirtyTexts).filter(([,value])=>value);
+  const status=document.getElementById('editStatus');
+  if(!entries.length){
+    if(status) status.textContent='Aucun nouveau texte à enregistrer.';
+    return;
+  }
+  if(status) status.textContent='Enregistrement des textes...';
+  for(const [key,value] of entries){
+    await saveEditedText(key,value);
+  }
+  if(status) status.textContent='Textes enregistrés sur ton Mac. Clique Publier GitHub pour les mettre en ligne.';
+}
+
+async function saveFocusedText(){
   const active=document.activeElement;
   if(active&&active.matches&&active.matches('[data-edit-text]')){
     active.blur();
-    return;
   }
-  const status=document.getElementById('editStatus');
-  if(status) status.textContent='Aucun texte en cours de modification. Clique un texte, modifie-le, puis clique ici.';
+  try{
+    await saveAllDirtyText();
+  }catch(error){
+    const status=document.getElementById('editStatus');
+    if(status) status.textContent=error.message||"Le texte n'a pas pu être enregistré.";
+  }
 }
 
 function toggleEditor(force){
@@ -1022,7 +1049,11 @@ async function publishGithub(){
 refreshEditedImages();
 setupDropTargets();
 setupEditableText();
-if(localStorage.getItem('vb-editor-on')==='1') toggleEditor(true);
+if(canSavePermanently){
+  toggleEditor(true);
+}else if(localStorage.getItem('vb-editor-on')==='1'){
+  toggleEditor(true);
+}
 </script>
 
 <!-- ═══ CONTACT POPUP ═══ -->
