@@ -174,7 +174,8 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
 .gzone-l:hover .ghint,.gzone-r:hover .ghint{opacity:1}
 .hslider{display:flex;height:100%;transition:transform .7s cubic-bezier(.77,0,.18,1);will-change:transform}
 .hslide{flex:0 0 100%;height:100%;position:relative;overflow:hidden}
-.hslide img{width:100%;height:100%;object-fit:contain;display:block;background:var(--off)}
+.hslide img,.hslide video{width:100%;height:100%;object-fit:contain;display:block;background:var(--off)}
+.media-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--off);color:var(--lg);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
 
 
 /* Nav arrows */
@@ -430,7 +431,7 @@ if(location.protocol==='http:'&&['127.0.0.1','localhost'].includes(location.host
 <script>
 /* DATA */
 const COM=[
-  {id:'c1',title:'La Patate Douce Radio',cat:'illustration',year:'2024',client:'La Patate Douce Radio',role:'Direction artistique',bio:"Un projet visuel construit autour de l'univers sonore et culturel de la radio.",thumb:'images/c1-cover.jpeg',gallery:[
+  {id:'c1',title:'La Patate Douce Radio',cat:'illustration',year:'2024',client:'La Patate Douce Radio',role:'Direction artistique',bio:"Un projet visuel construit autour de l'univers sonore et culturel de la radio.",thumb:'images/c1-photo1.jpeg',gallery:[
     [{u:'images/c1-photo1.jpeg',c:'tall'}],
     [{u:'images/c1-photo1.1.jpeg',c:'tall'},{u:'images/c1-photo1.2.jpeg',c:'tall'}],
     [{u:'images/c1-photo2.jpeg',c:'tall'}],
@@ -441,21 +442,21 @@ const COM=[
     [{u:'images/c1-photo5.jpeg',c:'tall'}],
     [{u:'images/c1-photo6.jpeg',c:'tall'}],
   ],next:'c2'},
-  {id:'c2',title:'Sacha Watches',cat:'branding',year:"2023-2024",client:'Sacha Watches',role:'Direction artistique',bio:"Un projet de branding pensé autour de l'élégance et de la précision horlogère.",thumb:'images/edited/thumb-c2-20260701210452.png',gallery:[[{u:'images/edited/gallery-c2-0-20260701205924.png',c:'tall'}],[{u:'images/edited/gallery-c2-1-20260701210223.png',c:'med'},{u:'images/edited/gallery-c2-2-20260701205933.png',c:'med'}]],next:'c3'},
-  {id:'c3',title:'Yves Saint Laurent - Waterstain',cat:'campagne',year:'2023',client:'Yves Saint Laurent',role:'Direction créative',bio:"Campagne pensée autour de l'eau et de la matière. Une exploration sensorielle de la marque.",thumb:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',c:'tall'}],[{u:'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&q=80',c:'med'}]],next:'c4'},
-  {id:'c4',title:'Yves Saint Laurent - MYSLF',cat:'campagne',year:"2026",client:'Yves Saint Laurent',role:"Assistant directeur artistique",bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&q=80',gallery:[[{u:'images/edited/gallery-c4-0-20260705112737.jpg',c:'tall'}],[{u:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80',c:'med w2'},{u:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',c:'med'}]],next:'c5'},
-  {id:'c5',title:'BVLGARI - Reborn Series',cat:'campagne',year:'2023',client:'BVLGARI',role:'DA & Photographie',bio:"Portraits en bord de mer, à l'heure où la lumière et l'eau se confondent.",thumb:'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80',c:'tall'}]],next:'c6'},
-  {id:'c6',title:'Maison Francis Kurkdjian - Baccarat rouge 540',cat:'campagne',year:'2025',client:'Maison Francis Kurkdjian',role:'Assistant Directeur Artistique',bio:"Une direction artistique construite sur l'abstraction olfactive. Formes douces et typographie tendue.",thumb:'images/c6-photo1.jpeg',gallery:[[{u:'images/c6-photo2.jpeg',c:'tall'}],[{u:'images/c6-photo3.jpeg',c:'med'},{u:'images/c6-photo1.jpeg',c:'med'}]],next:'c7'},
-  {id:'c7',title:'Givenchy beauty',cat:'E-commerce',year:'2025',client:'Givenchy beauty',role:'Assistant Directeur Artistique',bio:"Une direction artistique construite sur l'abstraction olfactive. Formes douces et typographie tendue.",thumb:'images/c7-photo1.jpg',gallery:[[{u:'images/c7-photo2.jpg',c:'tall'},{u:'images/c7-photo3.jpg',c:'tall'},{u:'images/c7-photo4.jpg',c:'tall'},{u:'images/c7-photo5.jpg',c:'tall'},{u:'images/c7-photo6.jpg',c:'tall'},{u:'images/c7-photo7.jpg',c:'tall'},{u:'images/c7-photo8.jpg',c:'tall'},{u:'images/c7-photo9.jpg',c:'tall'}]],next:'c1'},
+  {id:'c2',title:'Sacha Watches',cat:'branding',year:"2023-2024",client:'Sacha Watches',role:'Direction artistique',bio:"Un projet de branding pensé autour de l'élégance et de la précision horlogère.",thumb:'images/edited/gallery-c2-0-20260701205924.png',gallery:[[{u:'images/edited/gallery-c2-0-20260701205924.png',c:'tall'}],[{u:'images/edited/gallery-c2-1-20260701210223.png',c:'med'},{u:'images/edited/gallery-c2-2-20260701205933.png',c:'med'}]],next:'c4'},
+  {id:'c4',title:'Yves Saint Laurent - MYSLF',cat:'campagne',year:"2026",client:'Yves Saint Laurent',role:"Assistant directeur artistique",bio:"Une campagne à l'esthétique brute et contrastée, entre force et délicatesse.",thumb:'images/edited/gallery-c4-0-20260903184334.jpg',gallery:[[{u:'images/edited/gallery-c4-0-20260903184334.jpg',c:'tall'}],[{u:'images/edited/gallery-c4-1-20260903184340.jpg',c:'med w2'},{u:'images/edited/gallery-c4-2-20260903184657.mp4',c:'med',type:'video',placeholder:'Vidéo'}]],next:'c5'},
+  {id:'c5',title:"BVLGARI - Born Magnificent, Reborn Iconic",cat:"Campagne",year:"2025",client:'BVLGARI',role:"Assistant directeur artistique (LaMaison Publicis)",bio:"Cette Campagne met en avant les familles de design les plus emblématiques de la marque romaine à travers une métamorphose perpétuelle.",thumb:'images/edited/gallery-c5-0-20260903174152.jpg',gallery:[[{u:'images/edited/gallery-c5-0-20260903174152.jpg',c:'tall w2'},{u:'images/edited/gallery-c5-1-20260903174155.jpg',c:'tall'}],[{u:'images/edited/gallery-c5-2-20260903174930.jpg',c:'tall',placeholder:'Photo 3'},{u:'images/edited/gallery-c5-3-20260903174937.jpg',c:'tall',placeholder:'Photo 4'}],[{u:'images/edited/gallery-c5-4-20260903174959.jpg',c:'tall',placeholder:'Photo 5'},{u:'images/edited/gallery-c5-5-20260903175005.jpg',c:'tall',placeholder:'Photo 6'}],[{u:'images/edited/gallery-c5-6-20260903175012.mp4',c:'tall',type:'video',placeholder:'Vidéo'}]],next:'c6'},
+  {id:'c6',title:'Maison Francis Kurkdjian - Baccarat rouge 540',cat:"Campagne",year:'2025',client:'Maison Francis Kurkdjian',role:"Assistant directeur artistique (LaMaison Publicis)",bio:"Une direction artistique construite sur les souffles constitutifs minéral, du feu et de l'air. Storyboard de la capsule édition fête de fin d'année.",thumb:'images/c6-photo1.jpeg',gallery:[[{u:'images/c6-photo2.jpeg',c:'tall'}],[{u:'images/c6-photo3.jpeg',c:'med'},{u:'images/c6-photo1.jpeg',c:'med'}],[{u:'images/edited/gallery-c6-3-20260903182446.jpg',c:'tall',placeholder:'Photo 4'}],[{u:'images/edited/gallery-c6-4-20260903182543.mp4',c:'tall',type:'video',placeholder:'Vidéo'}]],next:'r3'},
+  {id:'r3',title:'Guerlain - Heure Bleue',cat:"Campagne",year:"2025/2026",client:'Guerlain',role:"Assistant directeur artistique (LaMaison Publicis)",bio:"Réinterpretation olfactive de l'historique  Heure Bleue de Guerlain",thumb:'images/edited/gallery-r3-0-20260903192312.jpg',gallery:[[{u:'images/edited/gallery-r3-0-20260903192312.jpg',c:'tall w2'},{u:'images/edited/gallery-r3-1-20260903192317.mp4',c:'tall',type:'video',placeholder:'Vidéo'}]],next:'c8'},
+  {id:'c8',title:'LOEWE - Balance in Layers',cat:"Campagne",year:"2025",client:'LOEWE',role:"Directeur artistique",bio:"Projet de campagne pour promouvoir le systeme olfactif de layering de Loewe, en réponse à la constante rédéfinition de l'identité, devenue multiple, et à un besoin croissant de singularisation et lde personnification des nouvelles générations.",thumb:'images/edited/gallery-c8-0-20260903185848.png',gallery:[[{u:'images/edited/gallery-c8-0-20260903185848.png',c:'tall',placeholder:'Photo 1'},{u:'images/edited/gallery-c8-1-20260903185901.png',c:'tall',placeholder:'Photo 2'}],[{u:'images/edited/gallery-c8-2-20260903185904.png',c:'tall',placeholder:'Photo 3'},{u:'images/edited/gallery-c8-3-20260903185908.png',c:'tall',placeholder:'Photo 4'}],[{u:'images/edited/gallery-c8-4-20260903191011.jpg',c:'tall',placeholder:'Photo 5'}],[{u:'images/edited/gallery-c8-5-20260903190217.mp4',c:'tall',type:'video',placeholder:'Vidéo'}]],next:'c7'},
+  {id:'c7',title:'Givenchy beauty',cat:"E-commerce",year:'2025',client:'Givenchy beauty',role:"Assistant directeur artistique (LaMaison Publicis)",bio:"Visuels de rendus produits pour le make-up Givenchy",thumb:'images/c7-photo2.jpg',gallery:[[{u:'images/c7-photo2.jpg',c:'tall'},{u:'images/c7-photo3.jpg',c:'tall'},{u:'images/c7-photo4.jpg',c:'tall'},{u:'images/c7-photo5.jpg',c:'tall'},{u:'images/c7-photo6.jpg',c:'tall'},{u:'images/c7-photo7.jpg',c:'tall'},{u:'images/c7-photo8.jpg',c:'tall'},{u:'images/c7-photo9.jpg',c:'tall'}]],next:'c1'},
 ];
 const REA=[
-  {id:'r1',title:'Mugler',cat:'génératif',year:'2024',client:'Mugler',role:'Conception & Direction IA',bio:"Dialogue entre l'intention humaine et l'hallucination algorithmique dans les espaces latents des modèles de diffusion.",thumb:'images/r1-photo1.jpeg',gallery:[[{u:'images/r1-photo2.jpeg',c:'tall w2'},{u:'images/r1-photo1.jpeg',c:'tall'}]],next:'r2'},
-  {id:'r2',title:'Gucci',cat:'campagne',year:'2024',client:'Gucci',role:'Direction IA',bio:"Portraits hybrides nés de la fusion entre photographie argentique et génération neurale.",thumb:'images/r2-photo1.jpeg',gallery:[[{u:'images/r2-photo2.jpeg',c:'tall'}],[{u:'images/r2-photo1.jpeg',c:'med'}]],next:'r3'},
-  {id:'r3',title:'Guerlain - Heure Bleue',cat:'expérimental',year:'2024',client:'Guerlain',role:'Artiste',bio:"Exploration des zones intermédiaires des modèles génératifs — images qui existent entre deux concepts.",thumb:'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',c:'tall'}]],next:'r4'},
-  {id:'r4',title:'Loewe - Far & Mid West',cat:'génératif',year:'2023',client:'Loewe',role:'Conception & DA',bio:"Des textures générées à partir de jeux de données réels. La donnée brute comme matière première visuelle.",thumb:'images/r4-photo1.jpeg',gallery:[[{u:'images/r4-photo2.jpeg',c:'tall'}],[{u:'images/r4-photo3.jpeg',c:'med'},{u:'images/r4-photo4.jpeg',c:'med'},{u:'images/r4-photo1.jpeg',c:'med'}]],next:'r5'},
-  {id:'r5',title:'ACNE Studio',cat:'expérimental',year:'2024',client:'ACNE Studio',role:'Création digitale',bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',gallery:[[{u:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85',c:'tall w2'},{u:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80',c:'tall'}]],next:'r6'},
-  {id:'r6',title:'Meller',cat:'campagne',year:'2023',client:'Meller',role:'Création print',bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'images/r6-photo1.jpeg',gallery:[[{u:'images/r6-photo1.jpeg',c:'tall'}]],next:'r7'},
-  {id:'r7',title:'AD cover',cat:'Editoriale',year:'2023',client:'Architectural Digest',role:'Conception & redaction & DA',bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'images/r7-photo1.jpeg',gallery:[[{u:'images/r7-photo2.jpeg',c:'tall w2'},{u:'images/r7-photo1.jpeg',c:'tall'}]],next:'r1'},
+  {id:'r1',title:'Mugler',cat:"Génératif",year:'2024',client:'Mugler',role:'Conception & Direction IA',bio:"Dialogue entre l'intention humaine et l'hallucination algorithmique dans les espaces latents des modèles de diffusion.",thumb:'images/r1-photo1.jpeg',gallery:[[{u:'images/r1-photo2.jpeg',c:'tall w2'},{u:'images/r1-photo1.jpeg',c:'tall'}]],next:'r2'},
+  {id:'r2',title:'Gucci',cat:"Génératif",year:'2024',client:'Gucci',role:"Conception & Direction IA",bio:"Campagne pour des escarpins Gucci dans un univers italiens à l'image de la marque.",thumb:'images/r2-photo1.jpeg',gallery:[[{u:'images/r2-photo2.jpeg',c:'tall'}],[{u:'images/r2-photo1.jpeg',c:'med'}]],next:'r4'},
+  {id:'r4',title:'Loewe - Far & Mid West',cat:"Génératif IA",year:'2023',client:'Loewe',role:'Conception & DA',bio:"Une série réalisée dans un univers texan ou l'interpratation du cuir vient se confronter dans son environnement naturel.",thumb:'images/r4-photo1.jpeg',gallery:[[{u:'images/r4-photo2.jpeg',c:'tall'}],[{u:'images/r4-photo3.jpeg',c:'med'},{u:'images/r4-photo4.jpeg',c:'med'},{u:'images/r4-photo1.jpeg',c:'med'}]],next:'r5'},
+  {id:'r5',title:'ACNE Studio',cat:"Expérimental",year:'2024',client:'ACNE Studio',role:"Exploration & DC",bio:"La beauté des artefacts produits par les réseaux convolutifs. L'erreur machine comme esthétique.",thumb:'images/edited/gallery-r5-0-20260903193313.jpeg',gallery:[[{u:'images/edited/gallery-r5-0-20260903193313.jpeg',c:'tall w2'},{u:'images/edited/gallery-r5-1-20260903193319.jpeg',c:'tall'}]],next:'r6'},
+  {id:'r6',title:'Meller',cat:"Campagne IA",year:'2023',client:'Meller',role:"DA",bio:"Campagne d'un lunetier espagnole ou la simplicité du visuel et la force du regard placent \"sa fenêtre\" au centre de celui-ci.",thumb:'images/r6-photo1.jpeg',gallery:[[{u:'images/r6-photo1.jpeg',c:'tall'}]],next:'r7'},
+  {id:'r7',title:'AD cover',cat:"Editoriale + image IA",year:'2023',client:'Architectural Digest',role:'Conception & redaction & DA',bio:"Projet fictif d'une édition tropicale d'Architectural Digest.",thumb:'images/r7-photo1.jpeg',gallery:[[{u:'images/r7-photo2.jpeg',c:'tall w2'},{u:'images/r7-photo1.jpeg',c:'tall'}]],next:'r1'},
 ];
 const ALL={};[...COM,...REA].forEach(p=>ALL[p.id]=p);
 
@@ -492,9 +493,11 @@ const layouts=[
 // Build image pool
 const allProjs=[...COM,...REA];
 const imgPool=[];
+const isVideoSrc=src=>/\.(mp4|webm|mov|m4v)(?:$|\?)/i.test(src||'');
 allProjs.forEach(proj=>{
-  const galImgs=proj.gallery.flat().map(g=>g.u);
-  const all=[proj.thumb,...galImgs].filter(Boolean);
+  const galImgs=proj.gallery.flat().filter(g=>!g.type&&!isVideoSrc(g.u)).map(g=>g.u);
+  const all=[proj.thumb,...galImgs].filter(src=>src&&!isVideoSrc(src));
+  if(!all.length) return;
   const picked=all[Math.floor(Math.random()*all.length)];
   imgPool.push({thumb:picked,proj});
 });
@@ -576,16 +579,16 @@ function buildEditorialGrid(el, data){
   for(let i=0; i<data.length; i+=2){
     const a = data[i], b = data[i+1];
     rows += `<div class="ed-row">
-      <div class="ed-item" onclick="showProj('${a.id}')">
-        <img src="${a.thumb}" alt="${a.title}" loading="lazy" data-edit-key="thumb:${a.id}">
+      <div class="ed-item" onclick="showProj('${a.id}')" ${a.thumb?'':`data-edit-key="thumb:${a.id}" data-edit-type="image"`}>
+        ${a.thumb?`<img src="${a.thumb}" alt="${a.title}" loading="lazy" data-edit-key="thumb:${a.id}">`:`<div class="media-placeholder">Couverture</div>`}
         <div class="ed-overlay">
           <div class="ed-title" data-edit-text="project:${a.id}:title">${a.title}</div>
           <div class="ed-cat"><span data-edit-text="project:${a.id}:cat">${a.cat}</span> — <span data-edit-text="project:${a.id}:year">${a.year}</span></div>
         </div>
       </div>`;
     if(b){
-      rows += `<div class="ed-item" onclick="showProj('${b.id}')">
-        <img src="${b.thumb}" alt="${b.title}" loading="lazy" data-edit-key="thumb:${b.id}">
+      rows += `<div class="ed-item" onclick="showProj('${b.id}')" ${b.thumb?'':`data-edit-key="thumb:${b.id}" data-edit-type="image"`}>
+        ${b.thumb?`<img src="${b.thumb}" alt="${b.title}" loading="lazy" data-edit-key="thumb:${b.id}">`:`<div class="media-placeholder">Couverture</div>`}
         <div class="ed-overlay">
           <div class="ed-title" data-edit-text="project:${b.id}:title">${b.title}</div>
           <div class="ed-cat"><span data-edit-text="project:${b.id}:cat">${b.cat}</span> — <span data-edit-text="project:${b.id}:year">${b.year}</span></div>
@@ -623,6 +626,7 @@ function filt(pg,f,btn){
 
 /* PAGE NAV */
 let fromPage='commercial';
+let currentProjectId=null;
 function go(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -638,6 +642,7 @@ function go(id){
 
 function showProj(id){
   const p=ALL[id];if(!p)return;
+  currentProjectId=id;
   // detect origin
   fromPage=REA.find(r=>r.id===id)?'reailized':'commercial';
   document.getElementById('dback').onclick=()=>go(fromPage);
@@ -659,8 +664,8 @@ function showProj(id){
   let galIdx=0;
   const slider=document.getElementById('hslider');
   slider.innerHTML=allImgs.map((img,i)=>`
-    <div class="hslide">
-      <img src="${img.u}" alt="" loading="${i===0?'eager':'lazy'}" data-edit-key="gallery:${p.id}:${i}">
+    <div class="hslide" data-edit-key="gallery:${p.id}:${i}" data-edit-type="${img.type||'image'}">
+      ${renderGalleryMedia(img,i)}
       <span class="hslide-caption">${String(i+1).padStart(2,'0')} / ${String(allImgs.length).padStart(2,'0')}</span>
     </div>`).join('');
   document.getElementById('galtotal').textContent=String(allImgs.length).padStart(2,'0');
@@ -690,6 +695,17 @@ function showProj(id){
   refreshEditedImages();
   setupDropTargets();
   setupEditableText();
+}
+
+function renderGalleryMedia(img,i){
+  if(!img.u){
+    return `<div class="media-placeholder">${img.placeholder||'Déposer média'}</div>`;
+  }
+  const isVideo=(img.type==='video')||/\.(mp4|webm|mov)(\?|$)/i.test(img.u);
+  if(isVideo){
+    return `<video src="${img.u}" controls playsinline preload="metadata"></video>`;
+  }
+  return `<img src="${img.u}" alt="" loading="${i===0?'eager':'lazy'}">`;
 }
 
 /* GALLERY NAV */
@@ -797,9 +813,32 @@ async function saveEditedImage(key,file){
   }
 
   const permanent=await savePermanentImage(key,file);
-  document.querySelectorAll(`img[data-edit-key="${key}"]`).forEach(img=>{img.src=permanent.path;});
+  updateGalleryMediaData(key,permanent.path,permanent.type);
+  document.querySelectorAll(`[data-edit-key="${key}"]`).forEach(el=>{
+    const media=el.matches('img,video')?el:el.querySelector('img,video');
+    if(media) media.src=permanent.path;
+    else if(el.classList.contains('ed-item')){
+      const placeholder=el.querySelector('.media-placeholder');
+      if(placeholder) placeholder.outerHTML=`<img src="${permanent.path}" alt="" loading="lazy" data-edit-key="${key}">`;
+    }
+  });
+  if(key.startsWith('gallery:')&&currentProjectId) showProj(currentProjectId);
   const status=document.getElementById('editStatus');
-  if(status) status.textContent='Image enregistrée sur ton Mac. Clique Publier GitHub pour la mettre en ligne.';
+  if(status) status.textContent='Média enregistré sur ton Mac. Clique Publier GitHub pour le mettre en ligne.';
+}
+
+function updateGalleryMediaData(key,path,type){
+  const [kind,projectId,indexValue]=key.split(':');
+  if(kind==='thumb'){
+    if(ALL[projectId]) ALL[projectId].thumb=path;
+    return;
+  }
+  if(kind!=='gallery'||!ALL[projectId]) return;
+  const item=ALL[projectId].gallery.flat()[Number(indexValue)];
+  if(item){
+    item.u=path;
+    item.type=type;
+  }
 }
 
 function fileToDataUrl(file){
@@ -861,7 +900,7 @@ async function refreshEditedImages(){
 }
 
 function setupDropTargets(){
-  document.querySelectorAll('img[data-edit-key]').forEach(img=>{
+  document.querySelectorAll('img[data-edit-key],.hslide[data-edit-key],.ed-item[data-edit-key]').forEach(img=>{
     const target=img.closest('.ed-item,.hslide')||img;
     if(target.dataset.dropReady==='1') return;
     target.dataset.dropReady='1';
@@ -878,7 +917,8 @@ function setupDropTargets(){
     target.addEventListener('drop',async e=>{
       if(!document.body.classList.contains('edit-on')) return;
       e.preventDefault();
-      const file=[...e.dataTransfer.files].find(f=>f.type.startsWith('image/'));
+      const acceptsVideo=img.dataset.editType==='video';
+      const file=[...e.dataTransfer.files].find(f=>acceptsVideo?f.type.startsWith('video/'):f.type.startsWith('image/'));
       if(!file) return;
       try{
         await saveEditedImage(img.dataset.editKey,file);
