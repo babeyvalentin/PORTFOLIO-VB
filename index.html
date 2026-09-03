@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VOTRE NOM</title>
+<title>Valentin BABEY</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -164,6 +164,7 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
 /* ── HORIZONTAL GALLERY ── */
 .dgallery{position:relative;height:calc(100vh - 104px);overflow:hidden;cursor:none}
 .gzone{position:absolute;top:0;bottom:0;width:50%;z-index:10}
+.dgallery.video-active .gzone{pointer-events:none}
 .gzone-l{left:0}
 .gzone-r{right:0}
 .gzone-l:hover~.gcursor,.gzone-l:hover~* .gcursor{display:none}
@@ -675,6 +676,7 @@ function showProj(id){
 
   window._galImgs=allImgs;
   window._galIdx=0;
+  updateGalleryVideoMode();
 
   // keyboard nav
   document.onkeydown=e=>{
@@ -717,7 +719,16 @@ function galMove(dir){
   document.getElementById('hslider').style.transform=`translateX(-${i*100}%)`;
   document.getElementById('galcur').textContent=String(i+1).padStart(2,'0');
   document.getElementById('galprogress').style.width=`${((i+1)/imgs.length)*100}%`;
+  updateGalleryVideoMode();
 
+}
+
+function updateGalleryVideoMode(){
+  const gallery=document.querySelector('.dgallery');
+  const item=(window._galImgs||[])[window._galIdx||0];
+  const src=item&&item.u;
+  const isVideo=item&&((item.type==='video')||/\.(mp4|webm|mov|m4v)(?:$|\?)/i.test(src||''));
+  if(gallery) gallery.classList.toggle('video-active',!!isVideo);
 }
 
 /* CURSOR */
