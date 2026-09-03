@@ -219,11 +219,60 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
   .hcat{border-right:none;border-bottom:1px solid var(--br)}
 }
 @media(max-width:700px){
+  html{font-size:14px}
+  body{cursor:auto;overflow-x:hidden}
+  #cur{display:none}
+
+  header{
+    height:58px;
+    padding:0 16px;
+    gap:14px;
+  }
+
+  .nav-logo{
+    font-size:15px;
+    white-space:nowrap;
+  }
+
+  .nav-r{
+    gap:13px;
+    justify-content:flex-end;
+    min-width:0;
+  }
+
+  .nl{
+    font-size:9px;
+    letter-spacing:.08em;
+    white-space:nowrap;
+  }
+
+  .local-editor .edit-toggle{
+    padding:6px 7px;
+  }
+
+  .local-editor .nav-logo{
+    font-size:13px;
+  }
+
+  .local-editor .nav-r{
+    gap:8px;
+  }
+
+  .local-editor .nl{
+    font-size:8px;
+  }
+
+  #home{
+    padding-top:58px;
+    min-height:100svh;
+    height:100svh;
+  }
+
   .scatter{
     grid-template-columns:repeat(6,1fr);
     column-gap:12px;
     row-gap:24px;
-    padding:76px 18px 180px;
+    padding:76px 18px 230px;
   }
 
   .sc{
@@ -239,17 +288,222 @@ footer span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:v
     grid-column:auto / span 4!important;
   }
 
-  header{
-    padding:0 20px;
+  .hcenter{
+    width:100%;
+    padding:0 18px;
+    top:47%;
   }
 
-  .nav-r{
-    gap:20px;
+  .hname{
+    font-size:clamp(42px,14vw,56px);
+    white-space:normal;
+    line-height:.9;
   }
 
-  .topbar{
-    padding:0 16px;
+  .hrole{
+    margin-top:12px;
+    font-size:9px;
+    letter-spacing:.18em;
+  }
+
+  .hcats{
+    grid-template-columns:1fr;
+  }
+
+  .hcat{
+    padding:17px 18px;
+    gap:14px;
+    border-right:none;
+    min-height:86px;
+  }
+
+  .hcname{
+    font-size:28px;
+  }
+
+  .hcdesc{
+    max-width:116px;
+    font-size:9px;
+    line-height:1.45;
+  }
+
+  .cat-page{
+    padding-top:58px;
+  }
+
+  .ed-nav{
+    padding:26px 18px 0;
+  }
+
+  .ed-page-title{
+    margin-top:18px;
+    font-size:clamp(42px,18vw,68px);
+  }
+
+  .ed-manifest{
+    padding:0 22px;
+    margin-top:16px;
+    font-size:11px;
+    line-height:1.75;
+  }
+
+  .ed-grid{
+    padding:38px 16px 74px;
+  }
+
+  .ed-row{
+    display:block;
+    margin-bottom:0;
+  }
+
+  .ed-row .ed-item,
+  .ed-row:nth-child(odd) .ed-item:first-child,
+  .ed-row:nth-child(odd) .ed-item:last-child,
+  .ed-row:nth-child(even) .ed-item:first-child,
+  .ed-row:nth-child(even) .ed-item:last-child{
+    height:auto;
+    min-height:0;
+    aspect-ratio:4/5;
+    margin:0 0 18px;
+  }
+
+  .ed-item img{
+    transform:none;
+  }
+
+  .ed-overlay{
+    background:linear-gradient(to top,rgba(10,10,10,.5),rgba(10,10,10,0));
+    padding:24px 20px;
+  }
+
+  .ed-title,
+  .ed-cat{
+    opacity:1;
+    transform:none;
+  }
+
+  footer{
+    padding:16px 18px;
+    gap:14px;
+  }
+
+  footer span{
+    font-size:9px;
+  }
+
+  #project-detail{
+    padding-top:58px;
+  }
+
+  .dtopbar{
+    height:auto;
+    min-height:54px;
+    padding:12px 16px;
     gap:12px;
+  }
+
+  .dtopbar-proj{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:9px;
+  }
+
+  .dlayout{
+    display:block;
+    min-height:0;
+  }
+
+  .dside{
+    padding:24px 18px 22px;
+  }
+
+  .dside-title{
+    font-size:34px;
+    max-width:100%;
+    overflow-wrap:anywhere;
+  }
+
+  .dside-cat{
+    margin-bottom:18px;
+  }
+
+  .dmeta-item{
+    padding:9px 0;
+  }
+
+  .dbio{
+    margin-top:20px;
+    font-size:11px;
+    line-height:1.75;
+  }
+
+  .dgallery{
+    height:62svh;
+    min-height:420px;
+    cursor:auto;
+  }
+
+  .gzone{
+    display:none;
+  }
+
+  .hslide-caption{
+    top:16px;
+    right:18px;
+    color:rgba(17,17,17,.42);
+  }
+
+  .galnav{
+    right:16px;
+    bottom:18px;
+    gap:10px;
+  }
+
+  .galnav-btn{
+    width:42px;
+    height:42px;
+    cursor:pointer;
+  }
+
+  .galcount{
+    left:18px;
+    bottom:30px;
+    color:rgba(17,17,17,.5);
+  }
+
+  .dnext{
+    padding:22px 18px;
+    gap:18px;
+  }
+
+  .dnext-title{
+    font-size:28px;
+    line-height:1;
+    text-align:right;
+  }
+
+  .dnarr{
+    width:34px;
+  }
+
+  .cpop-box{
+    margin-top:44vh;
+    padding:0 28px;
+  }
+
+  .cpop-close{
+    top:18px;
+    right:18px;
+  }
+
+  .edit-panel{
+    right:10px;
+    bottom:10px;
+    width:calc(100vw - 20px);
+    max-height:52svh;
+    overflow:auto;
   }
 }
 
